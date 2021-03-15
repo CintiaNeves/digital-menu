@@ -13,10 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Arrays.asList;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -77,9 +80,10 @@ public class ClientServiceImpl implements ClientService {
     }
 
     private void buildClient(ClientRequest clientRequest, Client client) {
-        client.setName(clientRequest.getName());
+        nameFormatter(clientRequest.getName());
+        client.setName(nameFormatter(clientRequest.getName()));
         client.setPhone(clientRequest.getPhone());
-        client.setEmail(clientRequest.getEmail());
+        client.setEmail(clientRequest.getEmail().toLowerCase());
         Set<Address> addressList = new HashSet<>();
 
         for(var addressRequest : clientRequest.getAddressList()){
@@ -93,5 +97,20 @@ public class ClientServiceImpl implements ClientService {
             addressList.add(address);
         }
         client.setAddressList(addressList);
+    }
+
+    private String nameFormatter(String name){
+        name = name.toLowerCase();
+        String names[] = name.split(" ");
+        List<String> listName = Arrays.asList(names);
+        String nameFormatted = "";
+
+        for(var n : listName){
+            if(n.length() > 3){
+                n = n.substring(0,1).toUpperCase().concat(n.substring(1));
+            }
+            nameFormatted = nameFormatted.concat(n).concat(" ");
+        }
+        return nameFormatted;
     }
 }
