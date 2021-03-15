@@ -18,7 +18,6 @@ import br.com.digitalmenu.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -53,6 +52,18 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Orders> findByClientId(Long clientId) {
         return repository.findByClientId(clientId);
+    }
+
+    @Override
+    public Boolean existsById(Long orderId) {
+        return repository.existsById(orderId);
+    }
+
+    @Override
+    public Orders update(Long orderId, Status status) {
+        Orders order = repository.findById(orderId).get();
+        order.setStatus(status);
+        return repository.save(order);
     }
 
     private void buildOrder(OrderRequest orderRequest, Orders orders) {

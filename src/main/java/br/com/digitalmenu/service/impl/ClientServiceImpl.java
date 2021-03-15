@@ -4,22 +4,19 @@ import br.com.digitalmenu.domain.entity.Address;
 import br.com.digitalmenu.domain.entity.City;
 import br.com.digitalmenu.domain.entity.Client;
 import br.com.digitalmenu.domain.request.ClientRequest;
-import br.com.digitalmenu.exception.EntityNotFoundException;
 import br.com.digitalmenu.exception.EntityAlreadyExistsException;
+import br.com.digitalmenu.exception.EntityNotFoundException;
 import br.com.digitalmenu.repository.ClientRepository;
 import br.com.digitalmenu.service.CityService;
 import br.com.digitalmenu.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
-import static java.util.Arrays.asList;
 
 @Service
 public class ClientServiceImpl implements ClientService {
