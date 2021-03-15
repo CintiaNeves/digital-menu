@@ -29,7 +29,7 @@ public class Client {
     @Column(name = "EMAIL")
     private String email;
 
-    @Column(name = "PHONE")
+    @Column(name = "PHONE", nullable = false)
     private String phone;
 
     @JoinColumn(name = "IDT_CLIENT")

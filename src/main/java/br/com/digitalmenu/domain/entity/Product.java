@@ -37,6 +37,9 @@ public class Product {
     @Column(name = "INGREDIENTS", nullable = false)
     private String ingredients;
 
+    @Column(name = "FLG_ADDITIONAL", nullable = false)
+    private Boolean additional;
+
     @CreationTimestamp
     @Column(name = "DAT_CREATE")
     private LocalDateTime datCreate;

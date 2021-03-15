@@ -13,4 +13,7 @@ public class OrderItemRequest {
     @NotNull(message = "Amount is mandatory.")
     private Integer amount;
 
+    @NotNull(message = "Price item is mandatory.")
+    private Double priceItem;
+
 }
