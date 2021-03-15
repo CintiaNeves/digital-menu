@@ -1,13 +1,18 @@
 package br.com.digitalmenu.service.impl;
 
+import br.com.digitalmenu.domain.entity.Address;
+import br.com.digitalmenu.domain.entity.City;
 import br.com.digitalmenu.domain.entity.Client;
 import br.com.digitalmenu.domain.request.ClientRequest;
+import br.com.digitalmenu.exception.EntityNotFoundException;
 import br.com.digitalmenu.exception.EntityAlreadyExistsException;
 import br.com.digitalmenu.repository.ClientRepository;
+import br.com.digitalmenu.service.CityService;
 import br.com.digitalmenu.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +20,9 @@ import java.util.Optional;
 public class ClientServiceImpl implements ClientService {
     @Autowired
     private ClientRepository repository;
+
+    @Autowired
+    private CityService service;
 
 
     @Override
@@ -70,5 +78,18 @@ public class ClientServiceImpl implements ClientService {
         client.setName(clientRequest.getName());
         client.setPhone(clientRequest.getPhone());
         client.setEmail(clientRequest.getEmail());
+        List<Address> addressList = new ArrayList<>();
+
+        for(var addressRequest : clientRequest.getAddressList()){
+            Address address = new Address();
+            City city = service.findById(addressRequest.getCityId())
+                    .orElseThrow(() -> new EntityNotFoundException("Entity City is not found"));
+            address.setCity(city);
+            address.setAddressName(addressRequest.getAddressName());
+            address.setNumber(addressRequest.getNumber());
+            address.setPostalArea(addressRequest.getPostalArea());
+            addressList.add(address);
+        }
+        client.setAddressList(addressList);
     }
 }

@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class Product {
     @Id
     @Column(name = "IDT_PRODUCT")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "DESC_PRODUCT", nullable = false)
@@ -31,8 +31,11 @@ public class Product {
     @Column(name = "NAM_CATEGORY", nullable = false)
     private Category category;
 
-    @Column(name = "IMAGE")
+    @Column(name = "IMAGE", nullable = false)
     private String image;
+
+    @Column(name = "INGREDIENTS", nullable = false)
+    private String ingredients;
 
     @CreationTimestamp
     @Column(name = "DAT_CREATE")

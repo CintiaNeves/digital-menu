@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
@@ -21,7 +20,7 @@ import java.time.LocalDateTime;
 public class OrderItem {
     @Id
     @Column(name = "IDT_ORDER_ITEM")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "AMOUNT", nullable = false)
@@ -30,10 +29,6 @@ public class OrderItem {
     @OneToOne
     @JoinColumn(name = "IDT_PRODUCT")
     private Product product;
-
-    @ManyToOne
-    @JoinColumn(name = "IDT_ORDERS")
-    private Orders order;
 
     @CreationTimestamp
     @Column(name = "DAT_CREATE")
