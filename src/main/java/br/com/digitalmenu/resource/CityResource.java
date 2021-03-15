@@ -1,12 +1,11 @@
 package br.com.digitalmenu.resource;
 
 import br.com.digitalmenu.domain.entity.City;
-import br.com.digitalmenu.domain.entity.Client;
 import br.com.digitalmenu.domain.request.CityRequest;
-import br.com.digitalmenu.domain.request.ClientRequest;
 import br.com.digitalmenu.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/city")
 public class CityResource {
 
