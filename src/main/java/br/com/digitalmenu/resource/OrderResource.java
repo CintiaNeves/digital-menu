@@ -1,7 +1,9 @@
 package br.com.digitalmenu.resource;
 
 import br.com.digitalmenu.domain.entity.Orders;
+import br.com.digitalmenu.domain.enums.Status;
 import br.com.digitalmenu.domain.request.OrderRequest;
+import br.com.digitalmenu.domain.request.OrderStatusRequest;
 import br.com.digitalmenu.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -43,5 +46,14 @@ public class OrderResource {
     @GetMapping("/{clientId}")
     public List<Orders> findByClientId (@PathVariable Long clientId){
         return service.findByClientId(clientId);
+    }
+
+    @PutMapping("/{orderId}")
+    public ResponseEntity<Orders> update (@PathVariable Long orderId, @Valid @RequestBody OrderStatusRequest orderStatusRequest){
+
+        if(!service.existsById(orderId)){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(service.update(orderId, orderStatusRequest.getStatus()));
     }
 }
