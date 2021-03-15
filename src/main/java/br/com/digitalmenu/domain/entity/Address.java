@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Data
@@ -17,13 +18,19 @@ import javax.persistence.Table;
 public class Address {
     @Id
     @Column(name = "IDT_ADDRESS")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "POSTAL_AREA")
+    private String postalArea;
 
     @Column(name = "NAM_ADDRESS", nullable = false)
     private String addressName;
 
-    @ManyToOne
-    @JoinColumn(name = "IDT_CLIENT")
-    private Client client;
+    @Column(name = "NUMBER", nullable = false)
+    private Integer number;
+
+    @OneToOne
+    @JoinColumn(name = "IDT_CITY")
+    private City city;
 }

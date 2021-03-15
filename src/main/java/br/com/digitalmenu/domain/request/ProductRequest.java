@@ -18,6 +18,9 @@ public class ProductRequest {
     @NotNull(message = "Category is mandatory.")
     private Category category;
 
-    @NotNull(message = "Image is mandatory.")
+    @NotBlank(message = "Image is mandatory.")
     private String image;
+
+    @NotBlank(message = "Ingredients is mandatory.")
+    private String ingredients;
 }

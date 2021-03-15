@@ -5,13 +5,18 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -19,11 +24,22 @@ import java.time.LocalDateTime;
 public class Orders {
     @Id
     @Column(name = "IDT_ORDERS")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "STATUS")
     private Status status;
+
+    @JoinColumn(name = "IDT_ADDRESS")
+    @OneToOne
+    private Address address;
+
+    @JoinColumn(name = "IDT_ORDERS")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItemList;
+
+    @OneToOne
+    private Client client;
 
     @CreationTimestamp
     @Column(name = "DAT_CREATE")

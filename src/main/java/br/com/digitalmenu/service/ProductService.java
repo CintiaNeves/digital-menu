@@ -2,12 +2,10 @@ package br.com.digitalmenu.service;
 
 import br.com.digitalmenu.domain.entity.Product;
 import br.com.digitalmenu.domain.request.ProductRequest;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
 public interface ProductService {
 
     public Product save(ProductRequest productRequest);
