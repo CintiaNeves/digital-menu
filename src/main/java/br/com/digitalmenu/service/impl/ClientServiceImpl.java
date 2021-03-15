@@ -111,6 +111,6 @@ public class ClientServiceImpl implements ClientService {
             }
             nameFormatted = nameFormatted.concat(n).concat(" ");
         }
-        return nameFormatted;
+        return nameFormatted.trim();
     }
 }

@@ -1,6 +1,7 @@
 package br.com.digitalmenu.resource;
 
 import br.com.digitalmenu.domain.entity.Client;
+import br.com.digitalmenu.domain.entity.Orders;
 import br.com.digitalmenu.domain.request.ClientRequest;
 import br.com.digitalmenu.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +45,13 @@ public class ClientResource {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Client create (@Valid @RequestBody ClientRequest clientRequest){
-        return service.save(clientRequest);
+    public ResponseEntity<?> create (@Valid @RequestBody ClientRequest clientRequest){
+        try{
+            Client client = service.save(clientRequest);
+            return ResponseEntity.ok(client);
+        }catch (Exception e){
+            return ResponseEntity.unprocessableEntity().body(e.toString());
+        }
     }
 
     @PutMapping("/{clientId}")

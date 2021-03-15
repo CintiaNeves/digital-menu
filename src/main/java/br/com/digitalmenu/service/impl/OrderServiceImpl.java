@@ -6,7 +6,9 @@ import br.com.digitalmenu.domain.entity.OrderItem;
 import br.com.digitalmenu.domain.entity.Orders;
 import br.com.digitalmenu.domain.entity.Product;
 import br.com.digitalmenu.domain.enums.Status;
+import br.com.digitalmenu.domain.request.OrderItemRequest;
 import br.com.digitalmenu.domain.request.OrderRequest;
+import br.com.digitalmenu.exception.CalculationPriceItemException;
 import br.com.digitalmenu.exception.EntityNotFoundException;
 import br.com.digitalmenu.repository.OrderRepository;
 import br.com.digitalmenu.service.AddressService;
@@ -67,12 +69,19 @@ public class OrderServiceImpl implements OrderService {
                     .orElseThrow(() -> new EntityNotFoundException("Entity Product is not found"));
             item.setAmount(itemRequest.getAmount());
             item.setProduct(product);
-
+            item.setPriceItem(itemRequest.getPriceItem());
+            if(!priceIsValid(product, item)){
+                throw new CalculationPriceItemException("Price item is divergent from price product");
+            }
             orderItemList.add(item);
         }
         orders.setOrderItemList(orderItemList);
         orders.setClient(client);
         orders.setStatus(Status.OPEN);
         orders.setAddress(address);
+    }
+
+    private boolean priceIsValid(Product product, OrderItem item){
+        return (product.getPrice().equals(item.getPriceItem()));
     }
 }

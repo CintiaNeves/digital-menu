@@ -74,5 +74,6 @@ public class ProductServiceImpl implements ProductService {
         product.setCategory(productRequest.getCategory());
         product.setImage(productRequest.getImage());
         product.setIngredients(productRequest.getIngredients());
+        product.setAdditional(productRequest.getAdditional());
     }
 }

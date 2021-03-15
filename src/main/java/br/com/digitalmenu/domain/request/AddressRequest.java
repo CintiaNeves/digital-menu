@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class AddressRequest {
-    private String postalArea;
 
     @NotBlank(message = "Address name is mandatory.")
     private String addressName;
@@ -17,4 +16,6 @@ public class AddressRequest {
 
     @NotNull(message = "City id is mandatory.")
     private Long cityId;
+
+    private String postalArea;
 }

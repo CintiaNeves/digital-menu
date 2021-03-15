@@ -26,12 +26,12 @@ public class OrderResource {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity create (@Valid @RequestBody OrderRequest orderRequest){
+    public ResponseEntity<?> create (@Valid @RequestBody OrderRequest orderRequest){
         try{
             Orders orders = service.save(orderRequest);
             return ResponseEntity.ok(orders);
         }catch (Exception e){
-            return ResponseEntity.unprocessableEntity().build();
+            return ResponseEntity.unprocessableEntity().body(e.toString());
         }
     }
 

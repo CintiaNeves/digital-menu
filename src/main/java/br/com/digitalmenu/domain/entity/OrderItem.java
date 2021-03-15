@@ -26,6 +26,9 @@ public class OrderItem {
     @Column(name = "AMOUNT", nullable = false)
     private Integer amount;
 
+    @Column(name = "PRICE_ITEM", nullable = false)
+    private Double priceItem;
+
     @OneToOne
     @JoinColumn(name = "IDT_PRODUCT")
     private Product product;
@@ -37,4 +40,5 @@ public class OrderItem {
     @UpdateTimestamp
     @Column(name = "DAT_UPDATE")
     private LocalDateTime datUpdate;
+
 }
