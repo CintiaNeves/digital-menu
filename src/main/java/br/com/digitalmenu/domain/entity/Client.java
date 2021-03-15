@@ -34,5 +34,5 @@ public class Client {
 
     @JoinColumn(name = "IDT_CLIENT")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Address> addressList;
+    private Set<Address> addressList;
 }

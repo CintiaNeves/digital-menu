@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -78,7 +80,7 @@ public class ClientServiceImpl implements ClientService {
         client.setName(clientRequest.getName());
         client.setPhone(clientRequest.getPhone());
         client.setEmail(clientRequest.getEmail());
-        List<Address> addressList = new ArrayList<>();
+        Set<Address> addressList = new HashSet<>();
 
         for(var addressRequest : clientRequest.getAddressList()){
             Address address = new Address();

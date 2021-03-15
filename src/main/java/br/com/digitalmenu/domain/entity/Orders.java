@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -36,7 +37,7 @@ public class Orders {
 
     @JoinColumn(name = "IDT_ORDERS")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> orderItemList;
+    private Set<OrderItem> orderItemList;
 
     @OneToOne
     private Client client;
