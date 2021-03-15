@@ -69,7 +69,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private void buildProduct(ProductRequest productRequest, Product product) {
-        product.setDescription(productRequest.getDescription());
+        product.setDescription(productRequest.getDescription().toLowerCase());
         product.setPrice(productRequest.getPrice());
         product.setCategory(productRequest.getCategory());
         product.setImage(productRequest.getImage());
