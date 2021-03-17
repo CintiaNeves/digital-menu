@@ -2,6 +2,7 @@ package br.com.digitalmenu.service;
 
 import br.com.digitalmenu.domain.entity.Product;
 import br.com.digitalmenu.domain.request.ProductRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,4 +24,6 @@ public interface ProductService {
     public Optional<Product> findByDescription(String productDescription);
 
     public List<Product> findLikeDescription(String productDescription);
+
+    public Product uploadImage(MultipartFile image, Long productId);
 }
