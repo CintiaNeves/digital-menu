@@ -31,8 +31,8 @@ public class Product {
     @Column(name = "NAM_CATEGORY", nullable = false)
     private Category category;
 
-    @Column(name = "IMAGE", nullable = false)
-    private String image;
+    @Column(name = "IMAGE_PATH")
+    private String imagePath;
 
     @Column(name = "INGREDIENTS", nullable = false)
     private String ingredients;
