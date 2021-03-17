@@ -1,6 +1,7 @@
 package br.com.digitalmenu.resource;
 
 import br.com.digitalmenu.domain.entity.Client;
+import br.com.digitalmenu.domain.entity.Orders;
 import br.com.digitalmenu.domain.request.ClientRequest;
 import br.com.digitalmenu.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,7 @@
 package br.com.digitalmenu.resource;
 
 import br.com.digitalmenu.domain.entity.Orders;
+import br.com.digitalmenu.domain.enums.Status;
 import br.com.digitalmenu.domain.request.OrderRequest;
 import br.com.digitalmenu.domain.request.OrderStatusRequest;
 import br.com.digitalmenu.service.OrderService;
@@ -57,4 +58,3 @@ public class OrderResource {
         }
         return ResponseEntity.ok(service.update(orderId, orderStatusRequest.getStatus()));
     }
-}

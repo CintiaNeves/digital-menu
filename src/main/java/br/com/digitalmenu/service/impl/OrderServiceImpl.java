@@ -6,6 +6,7 @@ import br.com.digitalmenu.domain.entity.OrderItem;
 import br.com.digitalmenu.domain.entity.Orders;
 import br.com.digitalmenu.domain.entity.Product;
 import br.com.digitalmenu.domain.enums.Status;
+import br.com.digitalmenu.domain.request.OrderItemRequest;
 import br.com.digitalmenu.domain.request.OrderRequest;
 import br.com.digitalmenu.exception.CalculationPriceItemException;
 import br.com.digitalmenu.exception.EntityNotFoundException;
