@@ -6,15 +6,17 @@ import br.com.digitalmenu.exception.EntityAlreadyExistsException;
 import br.com.digitalmenu.exception.UploadProductImageException;
 import br.com.digitalmenu.repository.ProductRepository;
 import br.com.digitalmenu.service.ProductService;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,34 +77,27 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public Product uploadImage(MultipartFile image, Long productId) {
+        Product product = repository.findById(productId).get();
+        Path directoryPath = Paths.get(new File("").getAbsolutePath().concat("/src/main/resources/static/images"), product.getDescription());
+        Path imagePath = directoryPath.resolve(image.getOriginalFilename());
+
         try {
-            Product product = repository.findById(productId).get();
-
-            URL url = getClass().getClassLoader().getResource("static/images/" + product.getDescription());
-            Path directoryPath = Path.of(url.toURI());
-
-            deleteFilesInDirectory(directoryPath);
-
-            Path imagePath = directoryPath.resolve(image.getOriginalFilename());
+            cleanDirectory(directoryPath);
             Files.createDirectories(directoryPath);
             image.transferTo(imagePath.toFile());
             product.setImagePath(imagePath.toString());
             repository.save(product);
             return product;
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             throw new UploadProductImageException("Failed to save image.");
         }
     }
 
-    private void deleteFilesInDirectory(Path directoryPath) {
-        directoryPath.toFile().mkdirs();
-        if(Files.isDirectory(directoryPath)) {
-            for(var file: directoryPath.toFile().listFiles()) {
-                if(!Files.isDirectory(file.toPath())) {
-                   file.delete();
-                }
-            }
+    private void cleanDirectory(Path directoryPath) throws IOException {
+        if(Files.exists(directoryPath)){
+            FileUtils.cleanDirectory(directoryPath.toFile());
         }
     }
 
@@ -113,5 +108,4 @@ public class ProductServiceImpl implements ProductService {
         product.setIngredients(productRequest.getIngredients());
         product.setAdditional(productRequest.getAdditional());
     }
-
 }
