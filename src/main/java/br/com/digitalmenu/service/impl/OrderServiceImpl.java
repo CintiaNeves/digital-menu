@@ -1,7 +1,5 @@
 package br.com.digitalmenu.service.impl;
 
-import br.com.digitalmenu.domain.entity.Address;
-import br.com.digitalmenu.domain.entity.Client;
 import br.com.digitalmenu.domain.entity.OrderItem;
 import br.com.digitalmenu.domain.entity.Orders;
 import br.com.digitalmenu.domain.entity.Product;
@@ -21,21 +19,24 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    private OrderRepository repository;
+    private transient OrderRepository repository;
 
     @Autowired
-    private ClientService clientService;
+    private transient ClientService clientService;
 
     @Autowired
-    private ProductService productService;
+    private transient ProductService productService;
 
     @Autowired
-    private AddressService addressService;
+    private transient AddressService addressService;
+
+    private transient Set<OrderItem> orderItemList;
 
     @Override
     public Orders save(OrderRequest orderRequest) {
@@ -67,29 +68,32 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void buildOrder(OrderRequest orderRequest, Orders orders) {
-
-        Set<OrderItem> orderItemList = new HashSet<>();
-        Client client = clientService.findById(orderRequest.getClientId())
-                .orElseThrow(() -> new EntityNotFoundException("Entity Client is not found"));
-        Address address = addressService.findById(orderRequest.getAddressId())
-                .orElseThrow(() -> new EntityNotFoundException("Entity Address is not found"));
-
+        orderItemList = new HashSet<>();
         for(var itemRequest : orderRequest.getOrderItemList()){
-            OrderItem item = new OrderItem();
             Product product = productService.findById(itemRequest.getProductId())
-                    .orElseThrow(() -> new EntityNotFoundException("Entity Product is not found"));
-            item.setAmount(itemRequest.getAmount());
-            item.setProduct(product);
-            item.setPriceItem(itemRequest.getPriceItem());
+                    .orElseThrow(supplier("Entity Product is not found"));
+
+            OrderItem item = createOrderItem(itemRequest, product);
+
             if(!priceIsValid(product, item)){
                 throw new CalculationPriceItemException("Price item is divergent from price product");
             }
             orderItemList.add(item);
         }
-        orders.setOrderItemList(orderItemList);
-        orders.setClient(client);
         orders.setStatus(Status.OPEN);
-        orders.setAddress(address);
+        orders.setOrderItemList(orderItemList);
+        orders.setClient(clientService.findById(orderRequest.getClientId())
+                .orElseThrow(supplier("Entity Client is not found")));
+        orders.setAddress(addressService.findById(orderRequest.getAddressId())
+                .orElseThrow(supplier("Entity Address is not found")));
+    }
+
+    private Supplier<EntityNotFoundException> supplier(String message) {
+        return () -> new EntityNotFoundException(message);
+    }
+
+    private OrderItem createOrderItem(OrderItemRequest itemRequest, Product product) {
+        return new OrderItem(itemRequest.getAmount(), itemRequest.getPriceItem(), product);
     }
 
     private boolean priceIsValid(Product product, OrderItem item){

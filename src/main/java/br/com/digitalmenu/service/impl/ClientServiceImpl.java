@@ -15,16 +15,19 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 
 @Service
 public class ClientServiceImpl implements ClientService {
     @Autowired
-    private ClientRepository repository;
+    private transient ClientRepository repository;
 
     @Autowired
-    private CityService service;
+    private transient CityService service;
+
+    private static final int MIN_SIZE_NAME = 3;
 
 
     @Override
@@ -80,7 +83,7 @@ public class ClientServiceImpl implements ClientService {
         nameFormatter(clientRequest.getName());
         client.setName(nameFormatter(clientRequest.getName()));
         client.setPhone(clientRequest.getPhone());
-        client.setEmail(clientRequest.getEmail().toLowerCase());
+        client.setEmail(clientRequest.getEmail().toLowerCase(Locale.US));
         Set<Address> addressList = new HashSet<>();
 
         for(var addressRequest : clientRequest.getAddressList()){
@@ -97,14 +100,14 @@ public class ClientServiceImpl implements ClientService {
     }
 
     private String nameFormatter(String name){
-        name = name.toLowerCase();
+        name = name.toLowerCase(Locale.US);
         String names[] = name.split(" ");
         List<String> listName = Arrays.asList(names);
         String nameFormatted = "";
 
         for(var n : listName){
-            if(n.length() > 3){
-                n = n.substring(0,1).toUpperCase().concat(n.substring(1));
+            if(n.length() > MIN_SIZE_NAME){
+                n = n.substring(0,1).toUpperCase(Locale.US).concat(n.substring(1));
             }
             nameFormatted = nameFormatted.concat(n).concat(" ");
         }

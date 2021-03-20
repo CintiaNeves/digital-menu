@@ -18,12 +18,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
     @Autowired
-    private ProductRepository repository;
+    private transient ProductRepository repository;
 
     @Override
     public Product save(ProductRequest productRequest) {
@@ -102,7 +103,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private void buildProduct(ProductRequest productRequest, Product product) {
-        product.setDescription(productRequest.getDescription().toLowerCase());
+        product.setDescription(productRequest.getDescription().toLowerCase(Locale.US));
         product.setPrice(productRequest.getPrice());
         product.setCategory(productRequest.getCategory());
         product.setIngredients(productRequest.getIngredients());

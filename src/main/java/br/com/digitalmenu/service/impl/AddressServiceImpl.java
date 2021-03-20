@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class AddressServiceImpl implements AddressService {
     @Autowired
-    private AddressRepository repository;
+    private transient AddressRepository repository;
 
 
     @Override

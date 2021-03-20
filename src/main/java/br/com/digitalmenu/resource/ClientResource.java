@@ -28,7 +28,7 @@ import java.util.Optional;
 public class ClientResource {
 
     @Autowired
-    private ClientService service;
+    private transient ClientService service;
 
     @GetMapping
     public List<Client> findAll (){
