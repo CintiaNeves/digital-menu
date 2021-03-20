@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 public class CityServiceImpl implements CityService {
     @Autowired
-    private CityRepository repository;
+    private transient CityRepository repository;
 
     @Override
     public City save(CityRequest cityRequest) {

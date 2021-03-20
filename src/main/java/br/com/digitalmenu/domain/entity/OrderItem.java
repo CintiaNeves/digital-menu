@@ -41,4 +41,11 @@ public class OrderItem {
     @Column(name = "DAT_UPDATE")
     private LocalDateTime datUpdate;
 
+    public OrderItem() {}
+
+    public OrderItem(Integer amount, Double priceItem, Product product) {
+        this.product = product;
+        this.amount = amount;
+        this.priceItem = priceItem;
+    }
 }

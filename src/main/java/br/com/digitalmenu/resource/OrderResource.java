@@ -26,7 +26,7 @@ import java.util.List;
 public class OrderResource {
 
     @Autowired
-    private OrderService service;
+    private transient OrderService service;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

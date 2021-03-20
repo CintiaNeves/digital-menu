@@ -26,7 +26,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Autowired
-    private MessageSource messageSource;
+    private transient MessageSource messageSource;
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,

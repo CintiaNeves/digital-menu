@@ -29,7 +29,7 @@ import java.util.Optional;
 public class ProductResource {
 
     @Autowired
-    private ProductService service;
+    private transient ProductService service;
 
     @GetMapping
     public List<Product> findAll (){

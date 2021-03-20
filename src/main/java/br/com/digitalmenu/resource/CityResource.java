@@ -22,7 +22,7 @@ import java.util.List;
 public class CityResource {
 
     @Autowired
-    private CityService service;
+    private transient CityService service;
 
     @GetMapping
     public List<City> findAll () {
