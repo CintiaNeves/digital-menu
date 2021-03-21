@@ -133,7 +133,7 @@ public class ProductResourceTest {
     }
 
     @Test
-    void shouldSearchProduct(){
+    void shouldSearchProductByDescription(){
         repository.save(productFactory.getDefaultFoodProduct());
         given()
         .when()

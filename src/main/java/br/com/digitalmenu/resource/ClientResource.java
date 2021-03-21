@@ -38,7 +38,6 @@ public class ClientResource {
     @GetMapping("/{clientId}")
     public ResponseEntity<Client> findById (@PathVariable Long clientId){
         Optional<Client> client = service.findById(clientId);
-
         if(client.isPresent()){
             return ResponseEntity.ok(client.get());
         }

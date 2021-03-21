@@ -1,6 +1,8 @@
 package br.com.digitalmenu.domain.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +22,7 @@ import java.util.Set;
 @Entity
 @Table(name = "CLIENT")
 public class Client {
+
     @Id
     @Column(name = "IDT_CLIENT")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,5 +39,13 @@ public class Client {
 
     @JoinColumn(name = "IDT_CLIENT")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Address> addressList;
+    private final Set<Address> addressList = new HashSet<>();
+
+    @CreationTimestamp
+    @Column(name = "DAT_CREATE")
+    private LocalDateTime datCreate;
+
+    @UpdateTimestamp
+    @Column(name = "DAT_UPDATE")
+    private LocalDateTime datUpdate;
 }
