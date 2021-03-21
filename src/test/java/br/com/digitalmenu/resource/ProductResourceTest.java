@@ -18,7 +18,6 @@ import static org.apache.http.HttpStatus.SC_NO_CONTENT;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 
 @RestAssuredTest
@@ -71,7 +70,7 @@ public class ProductResourceTest {
             .get(baseUrl)
         .then()
             .statusCode(SC_OK)
-            .body("size()", not(0));
+            .body("size()", equalTo(1));
     }
 
     @Test
@@ -140,6 +139,6 @@ public class ProductResourceTest {
             .get(baseUrl + "search/bacon")
         .then()
             .statusCode(SC_OK)
-            .body("size()", not(0));
+            .body("size()", equalTo(1));
     }
 }
