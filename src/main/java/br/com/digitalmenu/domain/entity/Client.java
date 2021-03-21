@@ -14,9 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Entity
@@ -39,7 +38,7 @@ public class Client {
 
     @JoinColumn(name = "IDT_CLIENT")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private final Set<Address> addressList = new HashSet<>();
+    private final List<Address> addressList = new ArrayList<>();
 
     @CreationTimestamp
     @Column(name = "DAT_CREATE")

@@ -16,9 +16,7 @@ import br.com.digitalmenu.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Supplier;
 
 @Service
@@ -35,8 +33,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private transient AddressService addressService;
-
-    private transient Set<OrderItem> orderItemList;
 
     @Override
     public Orders save(OrderRequest orderRequest) {
@@ -68,7 +64,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void buildOrder(OrderRequest orderRequest, Orders orders) {
-        orderItemList = new HashSet<>();
         for(var itemRequest : orderRequest.getOrderItemList()){
             Product product = productService.findById(itemRequest.getProductId())
                     .orElseThrow(supplier("Entity Product is not found"));
@@ -78,10 +73,9 @@ public class OrderServiceImpl implements OrderService {
             if(!priceIsValid(product, item)){
                 throw new CalculationPriceItemException("Price item is divergent from price product");
             }
-            orderItemList.add(item);
+           orders.getOrderItemList().add(item);
         }
         orders.setStatus(Status.OPEN);
-        orders.setOrderItemList(orderItemList);
         orders.setClient(clientService.findById(orderRequest.getClientId())
                 .orElseThrow(supplier("Entity Client is not found")));
         orders.setAddress(addressService.findById(orderRequest.getAddressId())
