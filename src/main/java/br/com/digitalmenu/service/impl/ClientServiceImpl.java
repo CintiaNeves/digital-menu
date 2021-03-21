@@ -54,7 +54,6 @@ public class ClientServiceImpl implements ClientService {
     public Client update(Long clientId, ClientRequest clientRequest) {
         Client client = repository.findById(clientId).get();
         buildClient(clientRequest, client);
-
         return repository.save(client);
     }
 
@@ -96,7 +95,7 @@ public class ClientServiceImpl implements ClientService {
             address.setPostalArea(addressRequest.getPostalArea());
             addressList.add(address);
         }
-        client.setAddressList(addressList);
+        client.getAddressList().addAll(addressList);
     }
 
     private String nameFormatter(String name){

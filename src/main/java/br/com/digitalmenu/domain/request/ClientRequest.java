@@ -3,6 +3,7 @@ package br.com.digitalmenu.domain.request;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -16,5 +17,6 @@ public class ClientRequest {
 
     private String email;
 
+    @NotNull(message = "Address is mandatory.")
     List<AddressRequest> addressList;
 }
