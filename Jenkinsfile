@@ -21,7 +21,7 @@ pipeline {
 
         stage("Deploy") {
             steps {
-                sh "BUILD_ID=hack java -Dspring.profiles.active=prod -jar build/libs/digital-menu-0.0.1-SNAPSHOT.jar&"
+                sh "BUILD_ID='hack' java -Dspring.profiles.active=prod -jar build/libs/digital-menu-0.0.1-SNAPSHOT.jar&"
             }
         }
     }
