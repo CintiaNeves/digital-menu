@@ -1,0 +1,17 @@
+spring:
+  h2:
+    console: enabled=true
+    path: /h2_console
+  datasource:
+    url: jdbc:h2:file:~/menu
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  servlet:
+    context-path: /api
