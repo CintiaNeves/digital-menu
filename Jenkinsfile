@@ -21,7 +21,7 @@ pipeline {
 
         stage("Deploy") {
             steps {
-                sh "./gradlew bootRun"
+                sh "BUILD_ID='hack'  ./gradlew bootRun"
             }
         }
     }
