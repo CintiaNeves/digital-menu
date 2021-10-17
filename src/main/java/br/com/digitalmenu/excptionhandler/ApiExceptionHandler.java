@@ -1,6 +1,7 @@
 package br.com.digitalmenu.excptionhandler;
 
 import br.com.digitalmenu.exception.EntityAlreadyExistsException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -23,16 +24,16 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @ControllerAdvice
+@AllArgsConstructor
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @Autowired
-    private transient MessageSource messageSource;
+    private final MessageSource messageSource;
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-        List<Exception.Field> fields = new ArrayList<Exception.Field>();
+        List<Exception.Field> fields = new ArrayList<>();
 
         for(ObjectError error : ex.getBindingResult().getAllErrors()) {
 

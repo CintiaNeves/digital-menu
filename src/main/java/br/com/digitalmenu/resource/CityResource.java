@@ -3,7 +3,7 @@ package br.com.digitalmenu.resource;
 import br.com.digitalmenu.domain.entity.City;
 import br.com.digitalmenu.domain.request.CityRequest;
 import br.com.digitalmenu.service.CityService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +18,11 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
+@RequiredArgsConstructor
 @RequestMapping("/city")
 public class CityResource {
 
-    @Autowired
-    private transient CityService service;
+    private final CityService service;
 
     @GetMapping
     public List<City> findAll () {

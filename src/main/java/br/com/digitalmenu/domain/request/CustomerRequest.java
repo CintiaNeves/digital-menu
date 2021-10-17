@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
-public class ClientRequest {
+public class CustomerRequest {
 
     @NotBlank(message = "Name is mandatory.")
     private String name;

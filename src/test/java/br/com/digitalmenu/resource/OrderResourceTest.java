@@ -19,11 +19,12 @@ import static org.hamcrest.Matchers.notNullValue;
 
 @RestAssuredTest
 public class OrderResourceTest {
-    private final transient OrderRequestFactory orderRequestFactory;
-    private final transient OrderRepository orderRepository;
-    private final transient OrderFactory orderFactory;
-    private final transient OrderStatusRequestFactory orderStatusRequestFactory;
-    private final transient String baseUrl = "/api/order/";
+
+    private final OrderRequestFactory orderRequestFactory;
+    private final OrderRepository orderRepository;
+    private final OrderFactory orderFactory;
+    private final OrderStatusRequestFactory orderStatusRequestFactory;
+    private final String BASE_URL = "/api/order/";
 
     @Autowired
     public OrderResourceTest(OrderRequestFactory orderRequestFactory,
@@ -41,7 +42,7 @@ public class OrderResourceTest {
         given()
             .body(orderRequestFactory.getDefaultOrderRequest())
         .when()
-            .post(baseUrl)
+            .post(BASE_URL)
         .then()
             .statusCode(SC_OK)
             .body("id", notNullValue())
@@ -55,7 +56,7 @@ public class OrderResourceTest {
         orderRepository.save(orderFactory.getDefaultOrder());
         given()
         .when()
-            .get(baseUrl)
+            .get(BASE_URL)
         .then()
             .statusCode(SC_OK)
             .body("size()", equalTo(1));
@@ -66,7 +67,7 @@ public class OrderResourceTest {
         Orders order = orderRepository.save(orderFactory.getDefaultOrder());
         given()
         .when()
-            .get(baseUrl + order.getClient().getId())
+            .get(BASE_URL + order.getCustomer().getId())
         .then()
             .statusCode(SC_OK)
             .body("size()", equalTo(1));
@@ -81,7 +82,7 @@ public class OrderResourceTest {
         given()
             .body(request)
         .when()
-            .put(baseUrl + idOrderSaved)
+            .put(BASE_URL + idOrderSaved)
         .then()
             .statusCode(SC_OK)
             .body("status", equalTo(DELIVERED.toString()));

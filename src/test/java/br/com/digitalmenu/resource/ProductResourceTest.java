@@ -22,10 +22,11 @@ import static org.hamcrest.Matchers.notNullValue;
 
 @RestAssuredTest
 public class ProductResourceTest {
-    private final transient ProductRequestFactory factory;
-    private final transient ProductFactory productFactory;
-    private final transient ProductRepository repository;
-    private final transient String baseUrl = "/api/product/";
+
+    private final ProductRequestFactory factory;
+    private final ProductFactory productFactory;
+    private final ProductRepository repository;
+    private final String BASE_URL = "/api/product/";
 
     @Autowired
     public ProductResourceTest(ProductRepository repository, ProductRequestFactory factory, ProductFactory productFactory) {
@@ -39,7 +40,7 @@ public class ProductResourceTest {
         given()
             .body(factory.getDefaultFoodProduct())
         .when()
-            .post(baseUrl)
+            .post(BASE_URL)
         .then()
             .statusCode(SC_CREATED)
             .body("id", notNullValue())
@@ -53,7 +54,7 @@ public class ProductResourceTest {
         given()
             .body(factory.getDefaultDrinkProduct())
         .when()
-            .post(baseUrl)
+            .post(BASE_URL)
         .then()
             .statusCode(SC_CREATED)
             .body("id", notNullValue())
@@ -67,7 +68,7 @@ public class ProductResourceTest {
         repository.save(productFactory.getDefaultFoodProduct());
         given()
         .when()
-            .get(baseUrl)
+            .get(BASE_URL)
         .then()
             .statusCode(SC_OK)
             .body("size()", equalTo(1));
@@ -78,7 +79,7 @@ public class ProductResourceTest {
         Product product = repository.save(productFactory.getDefaultFoodProduct());
         given()
         .when()
-            .get(baseUrl + product.getId())
+            .get(BASE_URL + product.getId())
         .then()
             .statusCode(SC_OK)
             .body(containsString("x-bacon"));
@@ -92,7 +93,7 @@ public class ProductResourceTest {
         given()
             .body(request)
         .when()
-            .post(baseUrl)
+            .post(BASE_URL)
         .then()
             .statusCode(SC_BAD_REQUEST);
     }
@@ -111,7 +112,7 @@ public class ProductResourceTest {
         given()
             .body(request)
         .when()
-            .put(baseUrl + idProductSaved)
+            .put(BASE_URL + idProductSaved)
         .then()
             .statusCode(SC_OK)
             .body("description", containsString("suco laranja natural"))
@@ -126,7 +127,7 @@ public class ProductResourceTest {
 
         given()
         .when()
-            .delete(baseUrl + idProductSaved)
+            .delete(BASE_URL + idProductSaved)
         .then()
             .statusCode(SC_NO_CONTENT);
     }
@@ -136,7 +137,7 @@ public class ProductResourceTest {
         repository.save(productFactory.getDefaultFoodProduct());
         given()
         .when()
-            .get(baseUrl + "search/bacon")
+            .get(BASE_URL + "search/bacon")
         .then()
             .statusCode(SC_OK)
             .body("size()", equalTo(1));

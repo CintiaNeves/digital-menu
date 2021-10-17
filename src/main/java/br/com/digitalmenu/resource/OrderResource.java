@@ -4,7 +4,7 @@ import br.com.digitalmenu.domain.entity.Orders;
 import br.com.digitalmenu.domain.request.OrderRequest;
 import br.com.digitalmenu.domain.request.OrderStatusRequest;
 import br.com.digitalmenu.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,11 +22,11 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
+@RequiredArgsConstructor
 @RequestMapping("/order")
 public class OrderResource {
 
-    @Autowired
-    private transient OrderService service;
+    private final OrderService service;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

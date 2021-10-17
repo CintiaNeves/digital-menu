@@ -2,7 +2,7 @@ package br.com.digitalmenu.factory;
 
 import br.com.digitalmenu.domain.entity.City;
 import br.com.digitalmenu.domain.request.AddressRequest;
-import br.com.digitalmenu.domain.request.ClientRequest;
+import br.com.digitalmenu.domain.request.CustomerRequest;
 import br.com.digitalmenu.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -11,16 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-public class ClientRequestFactory {
-    private final transient CityRepository repository;
-    private transient List<AddressRequest> addressList;
+public class CustomerRequestFactory {
+    private final CityRepository repository;
+    private List<AddressRequest> addressList;
 
     @Autowired
-    public ClientRequestFactory(CityRepository repository) {
+    public CustomerRequestFactory(CityRepository repository) {
         this.repository = repository;
     }
 
-    public ClientRequest getDefaultClientRequest() {
+    public CustomerRequest getDefaultClientRequest() {
         City city = new City();
         city.setName("São Paulo");
         city = repository.save(city);
@@ -32,15 +32,15 @@ public class ClientRequestFactory {
         address.setCityId(city.getId());
         addressList.add(address);
 
-        ClientRequest clientRequest = new ClientRequest();
-        clientRequest.setName("Nome Completo do Cliente");
-        clientRequest.setEmail("cliente@email.com");
-        clientRequest.setPhone("99999999999");
-        clientRequest.setAddressList(addressList);
-       return clientRequest;
+        CustomerRequest customerRequest = new CustomerRequest();
+        customerRequest.setName("Nome Completo do Cliente");
+        customerRequest.setEmail("cliente@email.com");
+        customerRequest.setPhone("99999999999");
+        customerRequest.setAddressList(addressList);
+       return customerRequest;
     }
 
-    public ClientRequest getEmpty(){
-        return new ClientRequest();
+    public CustomerRequest getEmpty(){
+        return new CustomerRequest();
     }
 }

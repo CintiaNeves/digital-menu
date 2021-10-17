@@ -19,15 +19,15 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "CLIENT")
-public class Client {
+@Table(name = "CUSTOMER")
+public class Customer {
 
     @Id
-    @Column(name = "IDT_CLIENT")
+    @Column(name = "IDT_CUSTOMER")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "NAM_CLIENT", nullable = false)
+    @Column(name = "NAM_CUSTOMER", nullable = false)
     private String name;
 
     @Column(name = "EMAIL")
@@ -36,7 +36,7 @@ public class Client {
     @Column(name = "PHONE", nullable = false)
     private String phone;
 
-    @JoinColumn(name = "IDT_CLIENT")
+    @JoinColumn(name = "IDT_CUSTOMER")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Address> addressList = new ArrayList<>();
 
