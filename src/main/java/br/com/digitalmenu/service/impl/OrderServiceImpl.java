@@ -7,7 +7,7 @@ import br.com.digitalmenu.domain.enums.Status;
 import br.com.digitalmenu.domain.request.OrderItemRequest;
 import br.com.digitalmenu.domain.request.OrderRequest;
 import br.com.digitalmenu.exception.CalculationPriceItemException;
-import br.com.digitalmenu.exception.EntityNotFoundException;
+import br.com.digitalmenu.exception.NotFoundException;
 import br.com.digitalmenu.repository.OrderRepository;
 import br.com.digitalmenu.service.AddressService;
 import br.com.digitalmenu.service.CustomerService;
@@ -79,8 +79,8 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(supplier("Entity Address is not found")));
     }
 
-    private Supplier<EntityNotFoundException> supplier(String message) {
-        return () -> new EntityNotFoundException(message);
+    private Supplier<NotFoundException> supplier(String message) {
+        return () -> new NotFoundException(message);
     }
 
     private OrderItem createOrderItem(OrderItemRequest itemRequest, Product product) {

@@ -5,14 +5,13 @@ import br.com.digitalmenu.domain.entity.City;
 import br.com.digitalmenu.domain.entity.Customer;
 import br.com.digitalmenu.domain.request.CustomerRequest;
 import br.com.digitalmenu.exception.EntityAlreadyExistsException;
-import br.com.digitalmenu.exception.EntityNotFoundException;
+import br.com.digitalmenu.exception.NotFoundException;
 import br.com.digitalmenu.repository.CustomerRepository;
 import br.com.digitalmenu.service.CityService;
 import br.com.digitalmenu.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -88,7 +87,7 @@ public class CustomerServiceImpl implements CustomerService {
         for(var addressRequest : customerRequest.getAddressList()){
             Address address = new Address();
             City city = service.findById(addressRequest.getCityId())
-                    .orElseThrow(() -> new EntityNotFoundException("Entity City is not found"));
+                    .orElseThrow(() -> new NotFoundException("Entity City is not found"));
             address.setCity(city);
             address.setAddressName(addressRequest.getAddressName());
             address.setNumber(addressRequest.getNumber());

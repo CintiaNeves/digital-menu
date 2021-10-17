@@ -1,8 +1,6 @@
 package br.com.digitalmenu.service.impl;
 
 import br.com.digitalmenu.domain.entity.City;
-import br.com.digitalmenu.domain.request.CityRequest;
-import br.com.digitalmenu.exception.EntityAlreadyExistsException;
 import br.com.digitalmenu.repository.CityRepository;
 import br.com.digitalmenu.service.CityService;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +16,9 @@ public class CityServiceImpl implements CityService {
     private final CityRepository repository;
 
     @Override
-    public City save(CityRequest cityRequest) {
-        if (repository.findByName(cityRequest.getName()).isPresent()) {
-            throw new EntityAlreadyExistsException("Entity already exists.");
-        }
-        City city = new City();
-        city.setName(cityRequest.getName());
-        return repository.save(city);
+    public City save(City city) {
+        var cityToSave = repository.findByName(city.getName());
+        return cityToSave.orElseGet(() -> repository.save(city));
     }
 
     @Override
