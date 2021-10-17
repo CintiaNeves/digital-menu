@@ -1,4 +1,4 @@
-package br.com.digitalmenu.resource;
+package br.com.digitalmenu.controller;
 
 import br.com.digitalmenu.domain.entity.Product;
 import br.com.digitalmenu.domain.request.ProductRequest;
