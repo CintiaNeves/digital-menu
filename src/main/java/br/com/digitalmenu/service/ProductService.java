@@ -9,21 +9,21 @@ import java.util.Optional;
 
 public interface ProductService {
 
-    public Product save(ProductRequest productRequest);
+    Product save(ProductRequest productRequest);
 
-    public List<Product> findAll();
+    List<Product> findAll();
 
-    public Optional<Product> findById(Long productId);
+    Optional<Product> findById(Long productId);
 
-    public Product update (Long productId, ProductRequest productRequest);
+    Product update(Long productId, ProductRequest productRequest);
 
-    public Boolean existsById(Long productId);
+    Boolean existsById(Long productId);
 
-    public void delete(Long productId);
+    void delete(Long productId);
 
-    public Optional<Product> findByDescription(String productDescription);
+    Optional<Product> findByDescription(String productDescription);
 
-    public List<Product> findLikeDescription(String productDescription);
+    List<Product> findLikeDescription(String productDescription);
 
-    public Product uploadImage(MultipartFile image, Long productId);
+    Product uploadImage(MultipartFile image, Long productId);
 }

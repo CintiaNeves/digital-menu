@@ -3,16 +3,16 @@ package br.com.digitalmenu.service.impl;
 import br.com.digitalmenu.domain.entity.Address;
 import br.com.digitalmenu.repository.AddressRepository;
 import br.com.digitalmenu.service.AddressService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService {
-    @Autowired
-    private transient AddressRepository repository;
 
+    private final AddressRepository repository;
 
     @Override
     public Optional<Address> findById(Long id) {

@@ -10,29 +10,26 @@ import br.com.digitalmenu.exception.CalculationPriceItemException;
 import br.com.digitalmenu.exception.EntityNotFoundException;
 import br.com.digitalmenu.repository.OrderRepository;
 import br.com.digitalmenu.service.AddressService;
-import br.com.digitalmenu.service.ClientService;
+import br.com.digitalmenu.service.CustomerService;
 import br.com.digitalmenu.service.OrderService;
 import br.com.digitalmenu.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.function.Supplier;
 
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
-    @Autowired
-    private transient OrderRepository repository;
+    private final OrderRepository repository;
 
-    @Autowired
-    private transient ClientService clientService;
+    private final CustomerService customerService;
 
-    @Autowired
-    private transient ProductService productService;
+    private final ProductService productService;
 
-    @Autowired
-    private transient AddressService addressService;
+    private final AddressService addressService;
 
     @Override
     public Orders save(OrderRequest orderRequest) {
@@ -48,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Orders> findByClientId(Long clientId) {
-        return repository.findByClientId(clientId);
+        return repository.findByCustomerId(clientId);
     }
 
     @Override
@@ -76,8 +73,8 @@ public class OrderServiceImpl implements OrderService {
            orders.getOrderItemList().add(item);
         }
         orders.setStatus(Status.OPEN);
-        orders.setClient(clientService.findById(orderRequest.getClientId())
-                .orElseThrow(supplier("Entity Client is not found")));
+        orders.setCustomer(customerService.findById(orderRequest.getClientId())
+                .orElseThrow(supplier("Entity Costumer is not found")));
         orders.setAddress(addressService.findById(orderRequest.getAddressId())
                 .orElseThrow(supplier("Entity Address is not found")));
     }

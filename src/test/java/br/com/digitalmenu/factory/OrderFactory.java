@@ -1,10 +1,10 @@
 package br.com.digitalmenu.factory;
 
-import br.com.digitalmenu.domain.entity.Client;
+import br.com.digitalmenu.domain.entity.Customer;
 import br.com.digitalmenu.domain.entity.OrderItem;
 import br.com.digitalmenu.domain.entity.Orders;
 import br.com.digitalmenu.domain.enums.Status;
-import br.com.digitalmenu.repository.ClientRepository;
+import br.com.digitalmenu.repository.CustomerRepository;
 import br.com.digitalmenu.repository.ProductRepository;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,32 +13,32 @@ import java.util.List;
 @Configuration
 public class OrderFactory {
 
-    private final transient ClientRepository clientRepository;
-    private final transient ProductRepository productRepository;
-    private final transient ClientFactory clientFactory;
-    private final transient ProductFactory productFactory;
-    private transient List<OrderItem> orderItemList;
+    private final CustomerRepository customerRepository;
+    private final ProductRepository productRepository;
+    private final CustomerFactory customerFactory;
+    private final ProductFactory productFactory;
+    private List<OrderItem> orderItemList;
 
-    public OrderFactory(ClientRepository clientRepository,
+    public OrderFactory(CustomerRepository customerRepository,
                         ProductRepository productRepository,
-                        ClientFactory clientFactory,
+                        CustomerFactory customerFactory,
                         ProductFactory productFactory) {
-        this.clientRepository = clientRepository;
+        this.customerRepository = customerRepository;
         this.productRepository = productRepository;
-        this.clientFactory = clientFactory;
+        this.customerFactory = customerFactory;
         this.productFactory = productFactory;
     }
 
     public Orders getDefaultOrder() {
         OrderItem item = new OrderItem();
-        Client client = clientRepository.save(clientFactory.getDefaultClient());
+        Customer customer = customerRepository.save(customerFactory.getDefaultClient());
         item.setProduct(productRepository.save(productFactory.getDefaultFoodProduct()));
         item.setPriceItem(15D);
         item.setAmount(1);
         Orders order = new Orders();
         order.setStatus(Status.OPEN);
-        order.setAddress(client.getAddressList().get(0));
-        order.setClient(client);
+        order.setAddress(customer.getAddressList().get(0));
+        order.setCustomer(customer);
         return order;
     }
 }

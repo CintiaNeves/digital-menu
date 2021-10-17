@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface OrderService {
 
-    public Orders save(OrderRequest orderRequest);
+    Orders save(OrderRequest orderRequest);
 
-    public List<Orders> findAll();
+    List<Orders> findAll();
 
     List<Orders> findByClientId(Long clientId);
 
-    public Boolean existsById(Long orderId);
+    Boolean existsById(Long orderId);
 
-    public Orders update (Long orderId, Status status);
+    Orders update(Long orderId, Status status);
 }

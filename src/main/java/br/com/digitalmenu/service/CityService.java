@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface CityService {
 
-    public City save(CityRequest cityRequest);
-    public List<City> findAll();
-    public Optional<City> findById(Long id);
+    City save(CityRequest cityRequest);
+    List<City> findAll();
+    Optional<City> findById(Long id);
 
 }

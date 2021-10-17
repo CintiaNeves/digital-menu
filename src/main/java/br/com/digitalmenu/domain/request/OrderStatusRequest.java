@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class OrderStatusRequest {
+
     @NotNull(message = "Status is mandatory.")
     private Status status;
 }

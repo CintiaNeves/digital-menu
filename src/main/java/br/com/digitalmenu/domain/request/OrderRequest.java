@@ -7,6 +7,7 @@ import java.util.List;
 
 @Data
 public class OrderRequest {
+
     @NotNull(message = "OrderItemList is mandatory.")
     List<OrderItemRequest> orderItemList;
 

@@ -3,7 +3,7 @@ package br.com.digitalmenu.resource;
 import br.com.digitalmenu.domain.entity.Product;
 import br.com.digitalmenu.domain.request.ProductRequest;
 import br.com.digitalmenu.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,11 +26,11 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @CrossOrigin("*")
+@RequiredArgsConstructor
 @RequestMapping("/product")
 public class ProductResource {
 
-    @Autowired
-    private transient ProductService service;
+    private final ProductService service;
 
     @GetMapping
     public List<Product> findAll (){
@@ -41,10 +41,7 @@ public class ProductResource {
     public ResponseEntity<Product> findById (@PathVariable Long productId){
         Optional<Product> product = service.findById(productId);
 
-        if(product.isPresent()){
-            return ResponseEntity.ok(product.get());
-        }
-        return ResponseEntity.notFound().build();
+        return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping

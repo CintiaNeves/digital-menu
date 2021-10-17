@@ -40,7 +40,7 @@ public class Orders {
     private final List<OrderItem> orderItemList = new ArrayList<>();
 
     @OneToOne
-    private Client client;
+    private Customer customer;
 
     @CreationTimestamp
     @Column(name = "DAT_CREATE")

@@ -2,14 +2,14 @@ package br.com.digitalmenu.service.impl;
 
 import br.com.digitalmenu.domain.entity.Address;
 import br.com.digitalmenu.domain.entity.City;
-import br.com.digitalmenu.domain.entity.Client;
-import br.com.digitalmenu.domain.request.ClientRequest;
+import br.com.digitalmenu.domain.entity.Customer;
+import br.com.digitalmenu.domain.request.CustomerRequest;
 import br.com.digitalmenu.exception.EntityAlreadyExistsException;
 import br.com.digitalmenu.exception.EntityNotFoundException;
-import br.com.digitalmenu.repository.ClientRepository;
+import br.com.digitalmenu.repository.CustomerRepository;
 import br.com.digitalmenu.service.CityService;
-import br.com.digitalmenu.service.ClientService;
-import org.springframework.beans.factory.annotation.Autowired;
+import br.com.digitalmenu.service.CustomerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -20,41 +20,41 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class ClientServiceImpl implements ClientService {
-    @Autowired
-    private transient ClientRepository repository;
+@RequiredArgsConstructor
+public class CustomerServiceImpl implements CustomerService {
 
-    @Autowired
-    private transient CityService service;
+    private final CustomerRepository repository;
+
+    private final CityService service;
 
     private static final int MIN_SIZE_NAME = 3;
 
 
     @Override
-    public Client save(ClientRequest clientRequest) {
-        if (repository.findByPhone(clientRequest.getPhone()).isPresent()) {
+    public Customer save(CustomerRequest customerRequest) {
+        if (repository.findByPhone(customerRequest.getPhone()).isPresent()) {
             throw new EntityAlreadyExistsException("Entity already exists.");
         }
-        Client client = new Client();
-        buildClient(clientRequest, client);
-        return repository.save(client);
+        Customer customer = new Customer();
+        buildClient(customerRequest, customer);
+        return repository.save(customer);
     }
 
     @Override
-    public List<Client> findAll() {
+    public List<Customer> findAll() {
         return repository.findAll();
     }
 
     @Override
-    public Optional<Client> findById(Long clientId) {
+    public Optional<Customer> findById(Long clientId) {
         return repository.findById(clientId);
     }
 
     @Override
-    public Client update(Long clientId, ClientRequest clientRequest) {
-        Client client = repository.findById(clientId).get();
-        buildClient(clientRequest, client);
-        return repository.save(client);
+    public Customer update(Long clientId, CustomerRequest customerRequest) {
+        Customer customer = repository.findById(clientId).get();
+        buildClient(customerRequest, customer);
+        return repository.save(customer);
     }
 
     @Override
@@ -64,28 +64,28 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void delete(Long clientId) {
-        Client client = repository.findById(clientId).get();
-        repository.delete(client);
+        Customer customer = repository.findById(clientId).get();
+        repository.delete(customer);
     }
 
     @Override
-    public Optional<Client> findByName(String clientName) {
+    public Optional<Customer> findByName(String clientName) {
         return repository.findByName(clientName);
     }
 
     @Override
-    public List<Client> findLikeName(String clientName) {
+    public List<Customer> findLikeName(String clientName) {
         return repository.findByNameContaining(clientName);
     }
 
-    private void buildClient(ClientRequest clientRequest, Client client) {
-        nameFormatter(clientRequest.getName());
-        client.setName(nameFormatter(clientRequest.getName()));
-        client.setPhone(clientRequest.getPhone());
-        client.setEmail(clientRequest.getEmail().toLowerCase(Locale.US));
+    private void buildClient(CustomerRequest customerRequest, Customer customer) {
+        nameFormatter(customerRequest.getName());
+        customer.setName(nameFormatter(customerRequest.getName()));
+        customer.setPhone(customerRequest.getPhone());
+        customer.setEmail(customerRequest.getEmail().toLowerCase(Locale.US));
         Set<Address> addressList = new HashSet<>();
 
-        for(var addressRequest : clientRequest.getAddressList()){
+        for(var addressRequest : customerRequest.getAddressList()){
             Address address = new Address();
             City city = service.findById(addressRequest.getCityId())
                     .orElseThrow(() -> new EntityNotFoundException("Entity City is not found"));
@@ -95,13 +95,12 @@ public class ClientServiceImpl implements ClientService {
             address.setPostalArea(addressRequest.getPostalArea());
             addressList.add(address);
         }
-        client.getAddressList().addAll(addressList);
+        customer.getAddressList().addAll(addressList);
     }
 
     private String nameFormatter(String name){
         name = name.toLowerCase(Locale.US);
-        String names[] = name.split(" ");
-        List<String> listName = Arrays.asList(names);
+        String[] listName = name.split(" ");
         String nameFormatted = "";
 
         for(var n : listName){

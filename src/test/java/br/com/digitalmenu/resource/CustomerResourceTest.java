@@ -1,11 +1,11 @@
 package br.com.digitalmenu.resource;
 
 import br.com.digitalmenu.annotation.RestAssuredTest;
-import br.com.digitalmenu.domain.entity.Client;
-import br.com.digitalmenu.domain.request.ClientRequest;
-import br.com.digitalmenu.factory.ClientFactory;
-import br.com.digitalmenu.factory.ClientRequestFactory;
-import br.com.digitalmenu.repository.ClientRepository;
+import br.com.digitalmenu.domain.entity.Customer;
+import br.com.digitalmenu.domain.request.CustomerRequest;
+import br.com.digitalmenu.factory.CustomerFactory;
+import br.com.digitalmenu.factory.CustomerRequestFactory;
+import br.com.digitalmenu.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,25 +18,28 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 @RestAssuredTest
-public class ClientResourceTest {
-    private final transient ClientRepository repository;
-    private final transient ClientRequestFactory clientRequestFactory;
-    private final transient ClientFactory factory;
-    private final transient String baseUrl = "/api/client/";
+public class CustomerResourceTest {
+
+    private final CustomerRepository repository;
+    private final CustomerRequestFactory customerRequestFactory;
+    private final CustomerFactory factory;
+    private final String BASE_URL = "/api/customer/";
 
     @Autowired
-    public ClientResourceTest(ClientRepository repository, ClientRequestFactory clientRequestFactory, ClientFactory factory) {
+    public CustomerResourceTest(CustomerRepository repository,
+                                CustomerRequestFactory customerRequestFactory,
+                                CustomerFactory factory) {
         this.repository = repository;
-        this.clientRequestFactory = clientRequestFactory;
+        this.customerRequestFactory = customerRequestFactory;
         this.factory = factory;
     }
 
     @Test
     void shouldCreateClient() {
         given()
-            .body(clientRequestFactory.getDefaultClientRequest())
+            .body(customerRequestFactory.getDefaultClientRequest())
         .when()
-            .post(baseUrl)
+            .post(BASE_URL)
         .then()
             .statusCode(SC_OK)
             .body("id", notNullValue())
@@ -49,7 +52,7 @@ public class ClientResourceTest {
         repository.save(factory.getDefaultClient());
         given()
         .when()
-            .get(baseUrl)
+            .get(BASE_URL)
         .then()
             .statusCode(SC_OK)
             .body("size()", equalTo(1));
@@ -57,10 +60,10 @@ public class ClientResourceTest {
 
     @Test
     void shouldReturnClientById() {
-        Client client = repository.save(factory.getDefaultClient());
+        Customer customer = repository.save(factory.getDefaultClient());
         given()
         .when()
-            .get(baseUrl + client.getId())
+            .get(BASE_URL + customer.getId())
         .then()
             .statusCode(SC_OK)
             .body(containsString("Nome Completo do Cliente"));
@@ -68,29 +71,29 @@ public class ClientResourceTest {
 
     @Test
     void shouldReturnBadRequestWhenTryCreateDuplicatedClientPhone() {
-        Client client = repository.save(factory.getDefaultClient());
-        ClientRequest request = clientRequestFactory.getDefaultClientRequest();
-        request.setPhone(client.getPhone());
+        Customer customer = repository.save(factory.getDefaultClient());
+        CustomerRequest request = customerRequestFactory.getDefaultClientRequest();
+        request.setPhone(customer.getPhone());
         given()
             .body(request)
         .when()
-            .post(baseUrl)
+            .post(BASE_URL)
         .then()
             .statusCode(SC_UNPROCESSABLE_ENTITY);
     }
 
     @Test
     void shouldUpdateClient() {
-        Client client = repository.save(factory.getDefaultClient());
-        Long idClientSaved = client.getId();
-        ClientRequest request = clientRequestFactory.getDefaultClientRequest();
+        Customer customer = repository.save(factory.getDefaultClient());
+        Long idClientSaved = customer.getId();
+        CustomerRequest request = customerRequestFactory.getDefaultClientRequest();
         request.setName("Nome Completo Alterado");
         request.setPhone("00000000000");
         request.setEmail("email.alterado@email.com");
         given()
             .body(request)
         .when()
-            .put(baseUrl + idClientSaved)
+            .put(BASE_URL + idClientSaved)
         .then()
             .statusCode(SC_OK)
             .body("name", containsString("Alterado"))
@@ -100,11 +103,11 @@ public class ClientResourceTest {
 
     @Test
     void shouldDeleteClient() {
-        Client client = repository.save(factory.getDefaultClient());
-        Long idClientSaved = client.getId();
+        Customer customer = repository.save(factory.getDefaultClient());
+        Long idClientSaved = customer.getId();
         given()
         .when()
-            .delete(baseUrl + idClientSaved)
+            .delete(BASE_URL + idClientSaved)
         .then()
             .statusCode(SC_NO_CONTENT);
     }
@@ -114,7 +117,7 @@ public class ClientResourceTest {
         repository.save(factory.getDefaultClient());
         given()
         .when()
-            .get(baseUrl + "search/Nome")
+            .get(BASE_URL + "search/Nome")
         .then()
             .statusCode(SC_OK)
             .body("size()", equalTo(1));

@@ -6,8 +6,8 @@ import br.com.digitalmenu.exception.EntityAlreadyExistsException;
 import br.com.digitalmenu.exception.UploadProductImageException;
 import br.com.digitalmenu.repository.ProductRepository;
 import br.com.digitalmenu.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,12 +19,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-    @Autowired
-    private transient ProductRepository repository;
+
+    private final ProductRepository repository;
 
     @Override
     public Product save(ProductRequest productRequest) {
@@ -82,7 +84,7 @@ public class ProductServiceImpl implements ProductService {
     public Product uploadImage(MultipartFile image, Long productId) {
         Product product = repository.findById(productId).get();
         Path directoryPath = Paths.get(new File("").getAbsolutePath().concat("/src/main/resources/static/images"), product.getDescription());
-        Path imagePath = directoryPath.resolve(image.getOriginalFilename());
+        Path imagePath = directoryPath.resolve(Objects.requireNonNull(image.getOriginalFilename()));
 
         try {
             cleanDirectory(directoryPath);
