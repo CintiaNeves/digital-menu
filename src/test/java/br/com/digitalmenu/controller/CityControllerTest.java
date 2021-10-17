@@ -3,12 +3,15 @@ package br.com.digitalmenu.controller;
 import br.com.digitalmenu.annotation.RestAssuredTest;
 import br.com.digitalmenu.factory.CityFactory;
 import br.com.digitalmenu.factory.CityRequestFactory;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static io.restassured.RestAssured.given;
 import static org.apache.http.HttpStatus.SC_CREATED;
 import static org.apache.http.HttpStatus.SC_OK;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 @RestAssuredTest
 public class CityControllerTest {
@@ -26,31 +29,39 @@ public class CityControllerTest {
     }
 
     @Test
+    @DisplayName("Deve salvar uma cidade")
     void shouldCreateCity() {
         given()
             .body(requestFactory.getDefaultCityRequest())
         .when()
             .post(BASE_URL)
         .then()
-            .statusCode(SC_CREATED);
+            .statusCode(SC_CREATED)
+            .body("name", notNullValue());
     }
 
     @Test
+    @DisplayName("Deve listar todas as cidades")
     void shouldListAllCities() {
+        var city = cityFactory.getPersistedCity();
+
         given()
         .when()
             .get(BASE_URL)
         .then()
-            .statusCode(SC_OK);
+            .statusCode(SC_OK)
+            .body("size()", equalTo(1));
     }
 
     @Test
+    @DisplayName("Deve buscar uma cidade por ID")
     void shouldGetACityById() {
         var city = cityFactory.getPersistedCity();
         given()
         .when()
-            .get(BASE_URL.concat(String.valueOf(city.getId())))
+            .get(BASE_URL + city.getId())
         .then()
-            .statusCode(SC_OK);
+            .statusCode(SC_OK)
+            .body("name", notNullValue());
     }
 }

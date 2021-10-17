@@ -4,7 +4,6 @@ import br.com.digitalmenu.domain.entity.Address;
 import br.com.digitalmenu.domain.entity.City;
 import br.com.digitalmenu.domain.entity.Customer;
 import br.com.digitalmenu.domain.request.CustomerRequest;
-import br.com.digitalmenu.exception.EntityAlreadyExistsException;
 import br.com.digitalmenu.exception.NotFoundException;
 import br.com.digitalmenu.repository.CustomerRepository;
 import br.com.digitalmenu.service.CityService;
@@ -30,13 +29,9 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     @Override
-    public Customer save(CustomerRequest customerRequest) {
-        if (repository.findByPhone(customerRequest.getPhone()).isPresent()) {
-            throw new EntityAlreadyExistsException("Entity already exists.");
-        }
-        Customer customer = new Customer();
-        buildClient(customerRequest, customer);
-        return repository.save(customer);
+    public Customer save(Customer customer) {
+        var customerToSave = repository.findByName(customer.getName());
+        return customerToSave.orElseGet(() -> repository.save(customer));
     }
 
     @Override
@@ -50,8 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer update(Long clientId, CustomerRequest customerRequest) {
-        Customer customer = repository.findById(clientId).get();
+    public Customer update(CustomerRequest customerRequest, Customer customer) {
         buildClient(customerRequest, customer);
         return repository.save(customer);
     }

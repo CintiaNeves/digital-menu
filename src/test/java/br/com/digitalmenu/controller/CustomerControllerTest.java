@@ -6,19 +6,20 @@ import br.com.digitalmenu.domain.request.CustomerRequest;
 import br.com.digitalmenu.factory.CustomerFactory;
 import br.com.digitalmenu.factory.CustomerRequestFactory;
 import br.com.digitalmenu.repository.CustomerRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static io.restassured.RestAssured.given;
+import static org.apache.http.HttpStatus.SC_CREATED;
 import static org.apache.http.HttpStatus.SC_NO_CONTENT;
 import static org.apache.http.HttpStatus.SC_OK;
-import static org.apache.http.HttpStatus.SC_UNPROCESSABLE_ENTITY;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 @RestAssuredTest
-public class CustomerResourceTest {
+public class CustomerControllerTest {
 
     private final CustomerRepository repository;
     private final CustomerRequestFactory customerRequestFactory;
@@ -26,30 +27,33 @@ public class CustomerResourceTest {
     private final String BASE_URL = "/api/customer/";
 
     @Autowired
-    public CustomerResourceTest(CustomerRepository repository,
-                                CustomerRequestFactory customerRequestFactory,
-                                CustomerFactory factory) {
+    public CustomerControllerTest(CustomerRepository repository,
+                                  CustomerRequestFactory customerRequestFactory,
+                                  CustomerFactory factory) {
         this.repository = repository;
         this.customerRequestFactory = customerRequestFactory;
         this.factory = factory;
     }
 
     @Test
-    void shouldCreateClient() {
+    @DisplayName("Deve salvar um cliente")
+    void shouldCreateACustomer() {
         given()
             .body(customerRequestFactory.getDefaultClientRequest())
         .when()
             .post(BASE_URL)
         .then()
-            .statusCode(SC_OK)
-            .body("id", notNullValue())
-            .body("datCreate", notNullValue())
-            .body("datUpdate", notNullValue());
+            .statusCode(SC_CREATED)
+            .body("name", notNullValue())
+            .body("phone", notNullValue())
+            .body("email", notNullValue());
     }
 
     @Test
+    @DisplayName("Deve listar todos os clientes")
     void shouldGetAllClients() {
         repository.save(factory.getDefaultClient());
+
         given()
         .when()
             .get(BASE_URL)
@@ -59,6 +63,7 @@ public class CustomerResourceTest {
     }
 
     @Test
+    @DisplayName("Deve buscar um cliente pelo ID")
     void shouldReturnClientById() {
         Customer customer = repository.save(factory.getDefaultClient());
         given()
@@ -70,19 +75,20 @@ public class CustomerResourceTest {
     }
 
     @Test
-    void shouldReturnBadRequestWhenTryCreateDuplicatedClientPhone() {
+    @DisplayName("Deve deletar um cliente do banco de dados")
+    void shouldDeleteClient() {
         Customer customer = repository.save(factory.getDefaultClient());
-        CustomerRequest request = customerRequestFactory.getDefaultClientRequest();
-        request.setPhone(customer.getPhone());
+        Long idClientSaved = customer.getId();
+
         given()
-            .body(request)
         .when()
-            .post(BASE_URL)
+            .delete(BASE_URL + idClientSaved)
         .then()
-            .statusCode(SC_UNPROCESSABLE_ENTITY);
+            .statusCode(SC_NO_CONTENT);
     }
 
     @Test
+    @DisplayName("Deve atualizar os dados do cliente no banco")
     void shouldUpdateClient() {
         Customer customer = repository.save(factory.getDefaultClient());
         Long idClientSaved = customer.getId();
@@ -102,17 +108,7 @@ public class CustomerResourceTest {
     }
 
     @Test
-    void shouldDeleteClient() {
-        Customer customer = repository.save(factory.getDefaultClient());
-        Long idClientSaved = customer.getId();
-        given()
-        .when()
-            .delete(BASE_URL + idClientSaved)
-        .then()
-            .statusCode(SC_NO_CONTENT);
-    }
-
-    @Test
+    @DisplayName("Deve buscar um cliente pelo nome")
     void shouldSearchClientByName(){
         repository.save(factory.getDefaultClient());
         given()
