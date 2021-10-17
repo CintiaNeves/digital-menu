@@ -8,13 +8,13 @@ import java.util.Optional;
 
 public interface CustomerService {
 
-    Customer save(CustomerRequest customerRequest);
+    Customer save(Customer customer);
 
     List<Customer> findAll();
 
     Optional<Customer> findById(Long clientId);
 
-    Customer update(Long clientId, CustomerRequest customerRequest);
+    Customer update(CustomerRequest customerRequest, Customer customer);
 
     Boolean existsById(Long clientId);
 
