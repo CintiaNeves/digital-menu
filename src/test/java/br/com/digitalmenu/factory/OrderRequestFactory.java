@@ -32,7 +32,7 @@ public class OrderRequestFactory {
     }
 
     public OrderRequest getDefaultOrderRequest() {
-        Customer customer = customerRepository.save(customerFactory.getDefaultClient());
+        Customer customer = customerRepository.save(customerFactory.getDefaultCustomer());
         Product product = productRepository.save(productFactory.getDefaultFoodProduct());
         OrderRequest orderRequest = new OrderRequest();
         orderRequest.setClientId(customer.getId());

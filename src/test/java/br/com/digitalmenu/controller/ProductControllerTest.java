@@ -1,71 +1,66 @@
 package br.com.digitalmenu.controller;
 
 import br.com.digitalmenu.annotation.RestAssuredTest;
-import br.com.digitalmenu.domain.entity.Product;
 import br.com.digitalmenu.domain.request.ProductRequest;
 import br.com.digitalmenu.factory.ProductFactory;
 import br.com.digitalmenu.factory.ProductRequestFactory;
-import br.com.digitalmenu.repository.ProductRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static br.com.digitalmenu.domain.enums.Category.DRINKS;
 import static br.com.digitalmenu.domain.enums.Category.FOOD;
 import static io.restassured.RestAssured.given;
-import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 import static org.apache.http.HttpStatus.SC_CREATED;
 import static org.apache.http.HttpStatus.SC_NO_CONTENT;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
 
 @RestAssuredTest
-public class ProductResourceTest {
+public class ProductControllerTest {
 
-    private final ProductRequestFactory factory;
+    private final ProductRequestFactory requestFactory;
+
     private final ProductFactory productFactory;
-    private final ProductRepository repository;
+
     private final String BASE_URL = "/api/product/";
 
     @Autowired
-    public ProductResourceTest(ProductRepository repository, ProductRequestFactory factory, ProductFactory productFactory) {
-        this.repository = repository;
-        this.factory = factory;
+    public ProductControllerTest(ProductRequestFactory requestFactory, ProductFactory productFactory) {
+        this.requestFactory = requestFactory;
         this.productFactory = productFactory;
     }
 
     @Test
+    @DisplayName("Deve criar um produto do tipo FOOD")
     void shouldCreateFoodProduct() {
         given()
-            .body(factory.getDefaultFoodProduct())
+            .body(requestFactory.getDefaultFoodProduct())
         .when()
             .post(BASE_URL)
         .then()
             .statusCode(SC_CREATED)
-            .body("id", notNullValue())
-            .body("category", equalTo(FOOD.toString()))
-            .body("datCreate", notNullValue())
-            .body("datUpdate", notNullValue());
+            .body("category", equalTo(FOOD.toString()));
     }
 
     @Test
+    @DisplayName("Deve criar um produto do tipo DRINKS")
     void shouldCreateDrinkProduct() {
         given()
-            .body(factory.getDefaultDrinkProduct())
+            .body(requestFactory.getDefaultDrinkProduct())
         .when()
             .post(BASE_URL)
         .then()
             .statusCode(SC_CREATED)
-            .body("id", notNullValue())
-            .body("category", equalTo(DRINKS.toString()))
-            .body("datCreate", notNullValue())
-            .body("datUpdate", notNullValue());
+            .body("category", equalTo(DRINKS.toString()));
     }
 
     @Test
+    @DisplayName("Deve listar todos os produtos do banco")
     void shouldGetAllProducts() {
-        repository.save(productFactory.getDefaultFoodProduct());
+        var product = productFactory.getPersistedProduct();
+
         given()
         .when()
             .get(BASE_URL)
@@ -75,8 +70,10 @@ public class ProductResourceTest {
     }
 
     @Test
+    @DisplayName("Deve buscar um produto pelo ID")
     void shouldReturnProductById() {
-        Product product = repository.save(productFactory.getDefaultFoodProduct());
+        var product = productFactory.getPersistedProduct();
+
         given()
         .when()
             .get(BASE_URL + product.getId())
@@ -86,23 +83,12 @@ public class ProductResourceTest {
     }
 
     @Test
-    void shouldReturnBadRequestWhenTryCreateDuplicatedProductDescription() {
-        Product product = repository.save(productFactory.getDefaultFoodProduct());
-        ProductRequest request = factory.getDefaultFoodProduct();
-        request.setDescription(product.getDescription());
-        given()
-            .body(request)
-        .when()
-            .post(BASE_URL)
-        .then()
-            .statusCode(SC_BAD_REQUEST);
-    }
-
-    @Test
+    @DisplayName("Deve atualizar os dados de um produto no banco")
     void shouldUpdateProduct() {
-        Product product = repository.save(productFactory.getDefaultFoodProduct());
+        var product = productFactory.getPersistedProduct();
+
         Long idProductSaved = product.getId();
-        ProductRequest request = factory.getEmpty();
+        ProductRequest request = requestFactory.getEmpty();
         request.setDescription("suco laranja natural");
         request.setAdditional(false);
         request.setIngredients("laranja");
@@ -121,8 +107,9 @@ public class ProductResourceTest {
     }
 
     @Test
+    @DisplayName("Deve deletar um produto no banco de dados")
     void shouldDeleteProduct() {
-        Product product = repository.save(productFactory.getDefaultFoodProduct());
+        var product = productFactory.getPersistedProduct();
         Long idProductSaved = product.getId();
 
         given()
@@ -133,8 +120,10 @@ public class ProductResourceTest {
     }
 
     @Test
+    @DisplayName("Deve buscar um produto pela descrição")
     void shouldSearchProductByDescription(){
-        repository.save(productFactory.getDefaultFoodProduct());
+        var product = productFactory.getPersistedProduct();
+
         given()
         .when()
             .get(BASE_URL + "search/bacon")

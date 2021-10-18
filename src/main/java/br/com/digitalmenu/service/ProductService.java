@@ -9,13 +9,13 @@ import java.util.Optional;
 
 public interface ProductService {
 
-    Product save(ProductRequest productRequest);
+    Product save(Product product);
 
     List<Product> findAll();
 
     Optional<Product> findById(Long productId);
 
-    Product update(Long productId, ProductRequest productRequest);
+    Product update(ProductRequest productRequest, Product product);
 
     Boolean existsById(Long productId);
 

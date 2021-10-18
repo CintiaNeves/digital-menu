@@ -29,12 +29,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository repository;
 
     @Override
-    public Product save(ProductRequest productRequest) {
-        if (findByDescription(productRequest.getDescription()).isPresent()) {
-            throw new EntityAlreadyExistsException("Entity already exists.");
-        }
-        Product product = new Product();
-        buildProduct(productRequest, product);
+    public Product save(Product product) {
         return repository.save(product);
     }
 
@@ -55,11 +50,8 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public Product update(Long productId, ProductRequest productRequest) {
-
-        Product product = repository.findById(productId).get();
+    public Product update(ProductRequest productRequest, Product product) {
         buildProduct(productRequest, product);
-
         return repository.save(product);
     }
 

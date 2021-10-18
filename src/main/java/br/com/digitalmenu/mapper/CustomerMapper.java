@@ -29,5 +29,4 @@ public class CustomerMapper {
                 .map(this::toCustomerResponse)
                 .collect(Collectors.toList());
     }
-
 }

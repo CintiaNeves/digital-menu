@@ -1,11 +1,9 @@
 package br.com.digitalmenu.controller;
 
 import br.com.digitalmenu.annotation.RestAssuredTest;
-import br.com.digitalmenu.domain.entity.Customer;
 import br.com.digitalmenu.domain.request.CustomerRequest;
 import br.com.digitalmenu.factory.CustomerFactory;
 import br.com.digitalmenu.factory.CustomerRequestFactory;
-import br.com.digitalmenu.repository.CustomerRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,18 +19,17 @@ import static org.hamcrest.Matchers.notNullValue;
 @RestAssuredTest
 public class CustomerControllerTest {
 
-    private final CustomerRepository repository;
     private final CustomerRequestFactory customerRequestFactory;
-    private final CustomerFactory factory;
+
+    private final CustomerFactory customerFactory;
+
     private final String BASE_URL = "/api/customer/";
 
     @Autowired
-    public CustomerControllerTest(CustomerRepository repository,
-                                  CustomerRequestFactory customerRequestFactory,
-                                  CustomerFactory factory) {
-        this.repository = repository;
+    public CustomerControllerTest(CustomerRequestFactory customerRequestFactory,
+                                  CustomerFactory customerFactory) {
         this.customerRequestFactory = customerRequestFactory;
-        this.factory = factory;
+        this.customerFactory = customerFactory;
     }
 
     @Test
@@ -52,7 +49,7 @@ public class CustomerControllerTest {
     @Test
     @DisplayName("Deve listar todos os clientes")
     void shouldGetAllClients() {
-        repository.save(factory.getDefaultClient());
+        var customer = customerFactory.getPersistedCustomer();
 
         given()
         .when()
@@ -65,7 +62,8 @@ public class CustomerControllerTest {
     @Test
     @DisplayName("Deve buscar um cliente pelo ID")
     void shouldReturnClientById() {
-        Customer customer = repository.save(factory.getDefaultClient());
+        var customer = customerFactory.getPersistedCustomer();
+
         given()
         .when()
             .get(BASE_URL + customer.getId())
@@ -77,7 +75,7 @@ public class CustomerControllerTest {
     @Test
     @DisplayName("Deve deletar um cliente do banco de dados")
     void shouldDeleteClient() {
-        Customer customer = repository.save(factory.getDefaultClient());
+        var customer = customerFactory.getPersistedCustomer();
         Long idClientSaved = customer.getId();
 
         given()
@@ -90,7 +88,8 @@ public class CustomerControllerTest {
     @Test
     @DisplayName("Deve atualizar os dados do cliente no banco")
     void shouldUpdateClient() {
-        Customer customer = repository.save(factory.getDefaultClient());
+        var customer = customerFactory.getPersistedCustomer();
+
         Long idClientSaved = customer.getId();
         CustomerRequest request = customerRequestFactory.getDefaultClientRequest();
         request.setName("Nome Completo Alterado");
@@ -110,7 +109,8 @@ public class CustomerControllerTest {
     @Test
     @DisplayName("Deve buscar um cliente pelo nome")
     void shouldSearchClientByName(){
-        repository.save(factory.getDefaultClient());
+        var customer = customerFactory.getPersistedCustomer();
+
         given()
         .when()
             .get(BASE_URL + "search/Nome")
