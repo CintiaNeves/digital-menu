@@ -57,6 +57,7 @@ public class CityControllerTest {
     @DisplayName("Deve buscar uma cidade por ID")
     void shouldGetACityById() {
         var city = cityFactory.getPersistedCity();
+
         given()
         .when()
             .get(BASE_URL + city.getId())

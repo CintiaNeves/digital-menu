@@ -4,6 +4,7 @@ import br.com.digitalmenu.domain.entity.Address;
 import br.com.digitalmenu.domain.entity.City;
 import br.com.digitalmenu.domain.entity.Customer;
 import br.com.digitalmenu.repository.CityRepository;
+import br.com.digitalmenu.repository.CustomerRepository;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.HashSet;
@@ -11,17 +12,22 @@ import java.util.Set;
 
 @Configuration
 public class CustomerFactory {
-    private final CityRepository repository;
+
+    private final CityRepository cityRepository;
+
+    private final CustomerRepository customerRepository;
+
     private Set<Address> addressList;
 
-    public CustomerFactory(CityRepository repository) {
-        this.repository = repository;
+    public CustomerFactory(CityRepository cityRepository, CustomerRepository customerRepository) {
+        this.cityRepository = cityRepository;
+        this.customerRepository = customerRepository;
     }
 
-    public Customer getDefaultClient() {
+    public Customer getDefaultCustomer() {
         City city = new City();
         city.setName("São Paulo");
-        city = repository.save(city);
+        city = cityRepository.save(city);
 
         addressList = new HashSet<>();
         Address address = new Address();
@@ -38,5 +44,13 @@ public class CustomerFactory {
         customer.getAddressList().addAll(addressList);
 
         return customer;
+    }
+
+    public Customer getPersistedCustomer() {
+        return customerRepository.save(this.getDefaultCustomer());
+    }
+
+    public Customer getEmpty(){
+        return new Customer();
     }
 }

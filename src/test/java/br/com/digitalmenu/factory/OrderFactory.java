@@ -31,7 +31,7 @@ public class OrderFactory {
 
     public Orders getDefaultOrder() {
         OrderItem item = new OrderItem();
-        Customer customer = customerRepository.save(customerFactory.getDefaultClient());
+        Customer customer = customerRepository.save(customerFactory.getDefaultCustomer());
         item.setProduct(productRepository.save(productFactory.getDefaultFoodProduct()));
         item.setPriceItem(15D);
         item.setAmount(1);
