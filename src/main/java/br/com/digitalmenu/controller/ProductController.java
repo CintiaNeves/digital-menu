@@ -1,10 +1,7 @@
 package br.com.digitalmenu.controller;
 
-import br.com.digitalmenu.domain.entity.Customer;
 import br.com.digitalmenu.domain.entity.Product;
-import br.com.digitalmenu.domain.request.CustomerRequest;
 import br.com.digitalmenu.domain.request.ProductRequest;
-import br.com.digitalmenu.domain.response.CustomerResponse;
 import br.com.digitalmenu.domain.response.ProductResponse;
 import br.com.digitalmenu.exception.NotFoundException;
 import br.com.digitalmenu.mapper.ProductMapper;
@@ -26,7 +23,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
