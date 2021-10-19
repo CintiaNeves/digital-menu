@@ -22,7 +22,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "ORDERS")
-public class Orders {
+public class Order {
     @Id
     @Column(name = "IDT_ORDERS")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +37,7 @@ public class Orders {
 
     @JoinColumn(name = "IDT_ORDERS")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<OrderItem> orderItemList = new ArrayList<>();
+    private List<OrderItem> orderItemList;
 
     @OneToOne
     private Customer customer;
