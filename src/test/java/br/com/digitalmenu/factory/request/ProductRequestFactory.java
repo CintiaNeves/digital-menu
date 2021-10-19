@@ -1,16 +1,16 @@
-package br.com.digitalmenu.factory;
+package br.com.digitalmenu.factory.request;
 
 import br.com.digitalmenu.domain.request.ProductRequest;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import static br.com.digitalmenu.domain.enums.Category.DRINKS;
 import static br.com.digitalmenu.domain.enums.Category.FOOD;
 
-@Configuration
+@Component
 public class ProductRequestFactory {
 
     public ProductRequest getDefaultFoodProduct() {
-        ProductRequest productRequest = new ProductRequest();
+        var productRequest = new ProductRequest();
         productRequest.setDescription("x-salad");
         productRequest.setPrice(15D);
         productRequest.setCategory(FOOD);
@@ -20,7 +20,7 @@ public class ProductRequestFactory {
     }
 
     public ProductRequest getDefaultDrinkProduct() {
-        ProductRequest productRequest = new ProductRequest();
+        var productRequest = new ProductRequest();
         productRequest.setDescription("coca-cola");
         productRequest.setPrice(5D);
         productRequest.setCategory(DRINKS);

@@ -1,13 +1,12 @@
-package br.com.digitalmenu.factory;
+package br.com.digitalmenu.factory.entity;
 
-import br.com.digitalmenu.domain.entity.Customer;
 import br.com.digitalmenu.domain.entity.Product;
 import br.com.digitalmenu.repository.ProductRepository;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import static br.com.digitalmenu.domain.enums.Category.FOOD;
 
-@Configuration
+@Component
 public class ProductFactory {
 
     private final ProductRepository productRepository;
@@ -15,8 +14,9 @@ public class ProductFactory {
     public ProductFactory(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
+
     public Product getDefaultFoodProduct() {
-        Product product = new Product();
+        var product = new Product();
         product.setDescription("x-bacon");
         product.setPrice(15D);
         product.setCategory(FOOD);
@@ -29,7 +29,4 @@ public class ProductFactory {
         return productRepository.save(this.getDefaultFoodProduct());
     }
 
-    public Customer getEmpty(){
-        return new Customer();
-    }
 }
