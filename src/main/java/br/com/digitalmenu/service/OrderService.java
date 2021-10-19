@@ -1,6 +1,6 @@
 package br.com.digitalmenu.service;
 
-import br.com.digitalmenu.domain.entity.Orders;
+import br.com.digitalmenu.domain.entity.Order;
 import br.com.digitalmenu.domain.enums.Status;
 import br.com.digitalmenu.domain.request.OrderRequest;
 
@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface OrderService {
 
-    Orders save(OrderRequest orderRequest);
+    Order save(OrderRequest orderRequest);
 
-    List<Orders> findAll();
+    List<Order> findAll();
 
-    List<Orders> findByClientId(Long clientId);
+    List<Order> findByClientId(Long clientId);
 
     Boolean existsById(Long orderId);
 
-    Orders update(Long orderId, Status status);
+    Order update(Long orderId, Status status);
 }

@@ -1,10 +1,10 @@
 package br.com.digitalmenu.repository;
 
-import br.com.digitalmenu.domain.entity.Orders;
+import br.com.digitalmenu.domain.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface OrderRepository extends JpaRepository<Orders, Long> {
-    List<Orders> findByCustomerId(Long clientId);
+public interface OrderRepository extends JpaRepository<Order, Long> {
+    List<Order> findByCustomerId(Long clientId);
 }

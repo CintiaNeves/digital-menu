@@ -1,7 +1,7 @@
 package br.com.digitalmenu.service.impl;
 
+import br.com.digitalmenu.domain.entity.Order;
 import br.com.digitalmenu.domain.entity.OrderItem;
-import br.com.digitalmenu.domain.entity.Orders;
 import br.com.digitalmenu.domain.entity.Product;
 import br.com.digitalmenu.domain.enums.Status;
 import br.com.digitalmenu.domain.request.OrderItemRequest;
@@ -16,6 +16,7 @@ import br.com.digitalmenu.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -32,19 +33,19 @@ public class OrderServiceImpl implements OrderService {
     private final AddressService addressService;
 
     @Override
-    public Orders save(OrderRequest orderRequest) {
-        Orders orders = new Orders();
-        buildOrder(orderRequest, orders);
-        return repository.save(orders);
+    public Order save(OrderRequest orderRequest) {
+        Order order = new Order();
+        buildOrder(orderRequest, order);
+        return repository.save(order);
     }
 
     @Override
-    public List<Orders> findAll() {
+    public List<Order> findAll() {
         return repository.findAll();
     }
 
     @Override
-    public List<Orders> findByClientId(Long clientId) {
+    public List<Order> findByClientId(Long clientId) {
         return repository.findByCustomerId(clientId);
     }
 
@@ -54,13 +55,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Orders update(Long orderId, Status status) {
-        Orders order = repository.findById(orderId).get();
+    public Order update(Long orderId, Status status) {
+        Order order = repository.findById(orderId).get();
         order.setStatus(status);
         return repository.save(order);
     }
 
-    private void buildOrder(OrderRequest orderRequest, Orders orders) {
+    private void buildOrder(OrderRequest orderRequest, Order order) {
+        order.setOrderItemList(new ArrayList<>());
         for(var itemRequest : orderRequest.getOrderItemList()){
             Product product = productService.findById(itemRequest.getProductId())
                     .orElseThrow(supplier("Entity Product is not found"));
@@ -70,12 +72,12 @@ public class OrderServiceImpl implements OrderService {
             if(!priceIsValid(product, item)){
                 throw new CalculationPriceItemException("Price item is divergent from price product");
             }
-           orders.getOrderItemList().add(item);
+           order.getOrderItemList().add(item);
         }
-        orders.setStatus(Status.OPEN);
-        orders.setCustomer(customerService.findById(orderRequest.getClientId())
+        order.setStatus(Status.OPEN);
+        order.setCustomer(customerService.findById(orderRequest.getClientId())
                 .orElseThrow(supplier("Entity Costumer is not found")));
-        orders.setAddress(addressService.findById(orderRequest.getAddressId())
+        order.setAddress(addressService.findById(orderRequest.getAddressId())
                 .orElseThrow(supplier("Entity Address is not found")));
     }
 
@@ -84,7 +86,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private OrderItem createOrderItem(OrderItemRequest itemRequest, Product product) {
-        return new OrderItem(itemRequest.getAmount(), itemRequest.getPriceItem(), product);
+        var orderItem = new OrderItem();
+        orderItem.setAmount(itemRequest.getAmount());
+        orderItem.setProduct(product);
+        orderItem.setPriceItem(itemRequest.getPriceItem());
+        return orderItem;
     }
 
     private boolean priceIsValid(Product product, OrderItem item){

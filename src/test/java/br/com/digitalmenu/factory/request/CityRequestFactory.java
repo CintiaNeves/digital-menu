@@ -1,4 +1,4 @@
-package br.com.digitalmenu.factory;
+package br.com.digitalmenu.factory.request;
 
 import br.com.digitalmenu.domain.request.CityRequest;
 import org.springframework.stereotype.Component;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class CityRequestFactory {
 
     public CityRequest getDefaultCityRequest() {
-        CityRequest cityRequest = new CityRequest();
+        var cityRequest = new CityRequest();
         cityRequest.setName("Mogi das Cruzes");
         return cityRequest;
     }

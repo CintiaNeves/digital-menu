@@ -1,9 +1,9 @@
-package br.com.digitalmenu.factory;
+package br.com.digitalmenu.factory.request;
 
 import br.com.digitalmenu.domain.request.OrderStatusRequest;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-@Configuration
+@Component
 public class OrderStatusRequestFactory {
 
     public OrderStatusRequest getEmpty() {
