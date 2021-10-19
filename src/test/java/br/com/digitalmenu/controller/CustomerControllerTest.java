@@ -2,8 +2,8 @@ package br.com.digitalmenu.controller;
 
 import br.com.digitalmenu.annotation.RestAssuredTest;
 import br.com.digitalmenu.domain.request.CustomerRequest;
-import br.com.digitalmenu.factory.CustomerFactory;
-import br.com.digitalmenu.factory.CustomerRequestFactory;
+import br.com.digitalmenu.factory.entity.CustomerFactory;
+import br.com.digitalmenu.factory.request.CustomerRequestFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
