@@ -3,30 +3,21 @@ package br.com.digitalmenu.mapper;
 import br.com.digitalmenu.domain.entity.Product;
 import br.com.digitalmenu.domain.request.ProductRequest;
 import br.com.digitalmenu.domain.response.ProductResponse;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Component
-@RequiredArgsConstructor
-public class ProductMapper {
+@Mapper(componentModel = "spring")
+public interface ProductMapper {
 
-    private final ModelMapper modelMapper;
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "imagePath", ignore = true)
+    @Mapping(target = "datCreate", ignore = true)
+    @Mapping(target = "datUpdate", ignore = true)
+    Product productFromRequest(ProductRequest productRequest);
 
-    public Product toProduct(ProductRequest productRequest) {
-        return modelMapper.map(productRequest, Product.class);
-    }
+    List<ProductResponse> productToProductResponse(List<Product> productList);
 
-    public ProductResponse toProductResponse(Product product) {
-        return modelMapper.map(product, ProductResponse.class);
-    }
-
-    public List<ProductResponse> toProductResponseList(List<Product> products){
-        return products.stream()
-                .map(this::toProductResponse)
-                .collect(Collectors.toList());
-    }
+    ProductResponse productToProductResponse(Product product);
 }
