@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 public class CityRequestFactory {
 
     public CityRequest getDefaultCityRequest() {
-        var cityRequest = new CityRequest();
-        cityRequest.setName("Mogi das Cruzes");
-        return cityRequest;
+        return CityRequest.builder()
+            .name("Mogi das Cruzes")
+            .build();
     }
 }

@@ -9,24 +9,24 @@ import java.util.List;
 
 @Component
 public class OrderRequestFactory {
-    private final CustomerFactory customerFactory;
-    private final OrderItemRequestFactory orderItemRequestFactory;
 
+    private final CustomerFactory customerFactory;
+
+    private final OrderItemRequestFactory orderItemRequestFactory;
 
     @Autowired
     public OrderRequestFactory(CustomerFactory customerFactory,
                                OrderItemRequestFactory orderItemRequestFactory) {
-
         this.customerFactory = customerFactory;
         this.orderItemRequestFactory = orderItemRequestFactory;
     }
 
     public OrderRequest getDefaultOrderRequest() {
         var customer = customerFactory.getPersistedCustomer();
-        var orderRequest = new OrderRequest();
-        orderRequest.setClientId(customer.getId());
-        orderRequest.setAddressId(customer.getAddressList().get(0).getId());
-        orderRequest.setOrderItemList(List.of(orderItemRequestFactory.getDefaultOrderItemRequest()));
-        return orderRequest;
+        return OrderRequest.builder()
+            .customerId(customer.getId())
+            .addressId(customer.getAddressList().get(0).getId())
+            .orderItemList(List.of(orderItemRequestFactory.getDefaultOrderItemRequest()))
+            .build();
     }
 }

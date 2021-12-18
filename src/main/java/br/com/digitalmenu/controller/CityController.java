@@ -32,18 +32,18 @@ public class CityController {
 
     @PostMapping
     public ResponseEntity<CityResponse> create(@Valid @RequestBody CityRequest cityRequest){
-        var city = service.save(cityMapper.toCity(cityRequest));
+        var city = service.save(cityMapper.cityFromRequest(cityRequest));
 
         var uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
                 .path("/{cityId}")
                 .buildAndExpand(city.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(cityMapper.toCityResponse(city));
+        return ResponseEntity.created(uri).body(cityMapper.cityToCityResponse(city));
     }
 
     @GetMapping
     public ResponseEntity<List<CityResponse>> findAll() {
-        return ResponseEntity.ok(cityMapper.toCityResponseList(service.findAll()));
+        return ResponseEntity.ok(cityMapper.cityToCityResponse(service.findAll()));
     }
 
     @GetMapping("/{cityId}")

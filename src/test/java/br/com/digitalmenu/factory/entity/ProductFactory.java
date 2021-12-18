@@ -16,13 +16,13 @@ public class ProductFactory {
     }
 
     public Product getDefaultFoodProduct() {
-        var product = new Product();
-        product.setDescription("x-bacon");
-        product.setPrice(15D);
-        product.setCategory(FOOD);
-        product.setIngredients("bread, cheese, bacon and salad.");
-        product.setAdditional(false);
-        return product;
+        return Product.builder()
+            .description("x-bacon")
+            .price(15D)
+            .category(FOOD)
+            .ingredients("bread, cheese, bacon and salad.")
+            .additional(false)
+            .build();
     }
 
     public Product getPersistedProduct() {

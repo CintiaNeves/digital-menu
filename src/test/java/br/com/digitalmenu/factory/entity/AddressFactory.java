@@ -19,12 +19,12 @@ public class AddressFactory {
     }
 
     public Address getDefaultAddress() {
-        var address = new Address();
-        address.setPostalArea("08700000");
-        address.setNumber(10);
-        address.setAddressName("Avenida Paulista");
-        address.setCity(cityFactory.getPersistedCity());
-        return address;
+        return Address.builder()
+            .postalArea("08700000")
+            .number(10)
+            .addressName("Avenida Paulista")
+            .city(cityFactory.getPersistedCity())
+            .build();
     }
 
     public Address getPersistedAddress() {

@@ -1,6 +1,9 @@
 package br.com.digitalmenu.domain.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -16,6 +19,9 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "ORDER_ITEM")
 public class OrderItem {
 
@@ -26,9 +32,6 @@ public class OrderItem {
 
     @Column(name = "AMOUNT", nullable = false)
     private Integer amount;
-
-    @Column(name = "PRICE_ITEM", nullable = false)
-    private Double priceItem;
 
     @OneToOne
     @JoinColumn(name = "IDT_PRODUCT")
@@ -42,3 +45,4 @@ public class OrderItem {
     @Column(name = "DAT_UPDATE")
     private LocalDateTime datUpdate;
 }
+

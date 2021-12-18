@@ -1,32 +1,17 @@
 package br.com.digitalmenu.mapper;
 
 import br.com.digitalmenu.domain.entity.Order;
-import br.com.digitalmenu.domain.request.OrderRequest;
 import br.com.digitalmenu.domain.response.OrderResponse;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Component
-@RequiredArgsConstructor
-public class OrderMapper {
+@Mapper(componentModel = "spring")
+public interface OrderMapper {
 
-    private final ModelMapper modelMapper;
+    Order orderFromRequest(Order orderRequest);
 
-    public Order toOrder(OrderRequest orderRequest) {
-        return modelMapper.map(orderRequest, Order.class);
-    }
+    List<OrderResponse> orderToOrderResponse(List<Order> orderList);
 
-    public OrderResponse toOrderResponse(Order order) {
-        return modelMapper.map(order, OrderResponse.class);
-    }
-
-    public List<OrderResponse> toOrderResponseList(List<Order> orders){
-        return orders.stream()
-                .map(this::toOrderResponse)
-                .collect(Collectors.toList());
-    }
+    OrderResponse orderToOrderResponse(Order order);
 }

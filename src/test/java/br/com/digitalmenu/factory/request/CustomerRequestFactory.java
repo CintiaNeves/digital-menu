@@ -16,12 +16,12 @@ public class CustomerRequestFactory {
         this.addressRequestFactory = addressRequestFactory;
     }
 
-    public CustomerRequest getDefaultClientRequest() {
-        var customerRequest = new CustomerRequest();
-        customerRequest.setName("Nome Completo do Cliente");
-        customerRequest.setEmail("cliente@email.com");
-        customerRequest.setPhone("99999999999");
-        customerRequest.setAddressList(List.of(addressRequestFactory.getDefaultAddressRequest()));
-       return customerRequest;
+    public CustomerRequest getDefaultCustomerRequest() {
+        return CustomerRequest.builder()
+            .name("Nome Completo do Cliente")
+            .email("cliente@email.com")
+            .phone("99999999999")
+            .addressList(List.of(addressRequestFactory.getDefaultAddressRequest()))
+            .build();
     }
 }

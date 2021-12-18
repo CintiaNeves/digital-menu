@@ -1,35 +1,31 @@
 package br.com.digitalmenu.service.impl;
 
 import br.com.digitalmenu.domain.entity.OrderItem;
-import br.com.digitalmenu.repository.OrderItemRepository;
+import br.com.digitalmenu.domain.request.OrderItemRequest;
+import br.com.digitalmenu.exception.NotFoundException;
 import br.com.digitalmenu.service.OrderItemService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderItemImpl implements OrderItemService {
 
-    private final OrderItemRepository orderItemRepository;
+    private ProductServiceImpl productService;
 
     @Override
-    public OrderItem save(OrderItem orderItem) {
-        if(isValidItem(orderItem)) {
-            return orderItemRepository.save(orderItem);
-        }
-        return orderItem;
-    }
+    public OrderItem toOrderItem(final OrderItemRequest orderItemRequest) {
+        log.info("M=validateRequest, I=Validando dados do item da ordem, orderItemRequest={}", orderItemRequest);
 
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void saveAll(List<OrderItem> items) {
-        items.forEach(this::save);
-    }
+        var product = productService.findById(orderItemRequest.getProductId())
+                .orElseThrow(() -> new NotFoundException(String.format("Product with id %s not found.", orderItemRequest.getProductId())));
 
-    private boolean isValidItem(OrderItem orderItem) {
-        return true;
+        return OrderItem.builder()
+                .amount(orderItemRequest.getAmount())
+                .product(product)
+                .build();
+
     }
 }

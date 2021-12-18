@@ -6,6 +6,7 @@ import br.com.digitalmenu.domain.entity.Customer;
 import br.com.digitalmenu.domain.request.CustomerRequest;
 import br.com.digitalmenu.exception.NotFoundException;
 import br.com.digitalmenu.repository.CustomerRepository;
+import br.com.digitalmenu.service.AddressService;
 import br.com.digitalmenu.service.CityService;
 import br.com.digitalmenu.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -23,15 +24,18 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository repository;
 
-    private final CityService service;
+    private final CityService cityService;
+
+    private final AddressService addressService;
 
     private static final int MIN_SIZE_NAME = 3;
 
 
     @Override
     public Customer save(Customer customer) {
-        var customerToSave = repository.findByName(customer.getName());
-        return customerToSave.orElseGet(() -> repository.save(customer));
+        var customerSaved = repository.findByPhone(customer.getPhone());
+
+        return customerSaved.orElseGet(() -> repository.save(validatedCustomer(customer)));
     }
 
     @Override
@@ -46,7 +50,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer update(CustomerRequest customerRequest, Customer customer) {
-        buildClient(customerRequest, customer);
+        buildCustomer(customerRequest, customer);
         return repository.save(customer);
     }
 
@@ -57,7 +61,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void delete(Long clientId) {
-        Customer customer = repository.findById(clientId).get();
+        Customer customer = repository.findById(clientId).orElseThrow();
         repository.delete(customer);
     }
 
@@ -71,7 +75,12 @@ public class CustomerServiceImpl implements CustomerService {
         return repository.findByNameContaining(clientName);
     }
 
-    private void buildClient(CustomerRequest customerRequest, Customer customer) {
+    private Customer validatedCustomer(final Customer customer) {
+        customer.getAddressList().forEach(addressService::validateAddress);
+        return customer;
+    }
+
+    private void buildCustomer(CustomerRequest customerRequest, Customer customer) {
         nameFormatter(customerRequest.getName());
         customer.setName(nameFormatter(customerRequest.getName()));
         customer.setPhone(customerRequest.getPhone());
@@ -80,7 +89,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         for(var addressRequest : customerRequest.getAddressList()){
             Address address = new Address();
-            City city = service.findById(addressRequest.getCityId())
+            City city = cityService.findById(addressRequest.getCity().getId())
                     .orElseThrow(() -> new NotFoundException("Entity City is not found"));
             address.setCity(city);
             address.setAddressName(addressRequest.getAddressName());

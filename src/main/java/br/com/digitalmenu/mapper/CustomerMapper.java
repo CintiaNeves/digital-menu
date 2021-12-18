@@ -3,30 +3,20 @@ package br.com.digitalmenu.mapper;
 import br.com.digitalmenu.domain.entity.Customer;
 import br.com.digitalmenu.domain.request.CustomerRequest;
 import br.com.digitalmenu.domain.response.CustomerResponse;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Component
-@RequiredArgsConstructor
-public class CustomerMapper {
+@Mapper(componentModel = "spring")
+public interface CustomerMapper {
 
-    private final ModelMapper modelMapper;
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "datCreate", ignore = true)
+    @Mapping(target = "datUpdate", ignore = true)
+    Customer customerFromRequest(CustomerRequest customerRequest);
 
-    public Customer toCustomer(CustomerRequest customerRequest) {
-        return modelMapper.map(customerRequest, Customer.class);
-    }
+    List<CustomerResponse> customerToCustomerResponse(List<Customer> customerList);
 
-    public CustomerResponse toCustomerResponse(Customer customer) {
-        return modelMapper.map(customer, CustomerResponse.class);
-    }
-
-    public List<CustomerResponse> toCustomerResponseList(List<Customer> customers){
-        return customers.stream()
-                .map(this::toCustomerResponse)
-                .collect(Collectors.toList());
-    }
+    CustomerResponse customerToCustomerResponse(Customer customer);
 }

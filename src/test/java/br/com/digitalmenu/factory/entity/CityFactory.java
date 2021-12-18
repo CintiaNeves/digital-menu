@@ -12,9 +12,9 @@ public class CityFactory {
     private CityRepository repository;
 
     public City getDefaultCity() {
-        var city = new City();
-        city.setName("Mogi das Cruzes");
-        return city;
+        return City.builder()
+            .name("Mogi das Cruzes")
+            .build();
     }
 
     public City getPersistedCity() {

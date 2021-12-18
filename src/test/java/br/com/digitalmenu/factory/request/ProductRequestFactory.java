@@ -10,23 +10,23 @@ import static br.com.digitalmenu.domain.enums.Category.FOOD;
 public class ProductRequestFactory {
 
     public ProductRequest getDefaultFoodProduct() {
-        var productRequest = new ProductRequest();
-        productRequest.setDescription("x-salad");
-        productRequest.setPrice(15D);
-        productRequest.setCategory(FOOD);
-        productRequest.setIngredients("bread, cheese, meat and salad.");
-        productRequest.setAdditional(false);
-       return productRequest;
+        return ProductRequest.builder()
+            .description("x-salad")
+            .price(15D)
+            .category(FOOD)
+            .ingredients("bread, cheese, meat and salad.")
+            .additional(false)
+            .build();
     }
 
     public ProductRequest getDefaultDrinkProduct() {
-        var productRequest = new ProductRequest();
-        productRequest.setDescription("coca-cola");
-        productRequest.setPrice(5D);
-        productRequest.setCategory(DRINKS);
-        productRequest.setIngredients("industrialized");
-        productRequest.setAdditional(false);
-        return productRequest;
+        return ProductRequest.builder()
+                .description("coca-cola")
+                .price(5D)
+                .category(DRINKS)
+                .ingredients("industrialized.")
+                .additional(false)
+                .build();
     }
 
     public ProductRequest getEmpty(){

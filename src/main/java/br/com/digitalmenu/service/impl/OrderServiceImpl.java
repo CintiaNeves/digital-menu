@@ -6,7 +6,6 @@ import br.com.digitalmenu.domain.entity.Product;
 import br.com.digitalmenu.domain.enums.Status;
 import br.com.digitalmenu.domain.request.OrderItemRequest;
 import br.com.digitalmenu.domain.request.OrderRequest;
-import br.com.digitalmenu.exception.CalculationPriceItemException;
 import br.com.digitalmenu.exception.NotFoundException;
 import br.com.digitalmenu.repository.OrderRepository;
 import br.com.digitalmenu.service.AddressService;
@@ -34,9 +33,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order save(OrderRequest orderRequest) {
-        Order order = new Order();
-        buildOrder(orderRequest, order);
-        return repository.save(order);
+        return repository.save(buildOrder(orderRequest));
     }
 
     @Override
@@ -56,29 +53,26 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order update(Long orderId, Status status) {
-        Order order = repository.findById(orderId).get();
+        Order order = repository.findById(orderId).orElseThrow();
         order.setStatus(status);
         return repository.save(order);
     }
 
-    private void buildOrder(OrderRequest orderRequest, Order order) {
+    private Order buildOrder(final OrderRequest orderRequest) {
+        var order = new Order();
         order.setOrderItemList(new ArrayList<>());
         for(var itemRequest : orderRequest.getOrderItemList()){
             Product product = productService.findById(itemRequest.getProductId())
                     .orElseThrow(supplier("Entity Product is not found"));
-
             OrderItem item = createOrderItem(itemRequest, product);
-
-            if(!priceIsValid(product, item)){
-                throw new CalculationPriceItemException("Price item is divergent from price product");
-            }
-           order.getOrderItemList().add(item);
+            order.getOrderItemList().add(item);
         }
         order.setStatus(Status.OPEN);
-        order.setCustomer(customerService.findById(orderRequest.getClientId())
+        order.setCustomer(customerService.findById(orderRequest.getCustomerId())
                 .orElseThrow(supplier("Entity Costumer is not found")));
         order.setAddress(addressService.findById(orderRequest.getAddressId())
                 .orElseThrow(supplier("Entity Address is not found")));
+        return order;
     }
 
     private Supplier<NotFoundException> supplier(String message) {
@@ -89,11 +83,7 @@ public class OrderServiceImpl implements OrderService {
         var orderItem = new OrderItem();
         orderItem.setAmount(itemRequest.getAmount());
         orderItem.setProduct(product);
-        orderItem.setPriceItem(itemRequest.getPriceItem());
         return orderItem;
     }
 
-    private boolean priceIsValid(Product product, OrderItem item){
-        return (product.getPrice().equals(item.getPriceItem()));
-    }
 }
