@@ -1,6 +1,9 @@
 package br.com.digitalmenu.domain.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -19,6 +22,9 @@ import java.util.List;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "CUSTOMER")
 public class Customer {
 
@@ -38,7 +44,7 @@ public class Customer {
 
     @JoinColumn(name = "IDT_CUSTOMER")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Address> addressList = new ArrayList<>();
+    private List<Address> addressList;
 
     @CreationTimestamp
     @Column(name = "DAT_CREATE")

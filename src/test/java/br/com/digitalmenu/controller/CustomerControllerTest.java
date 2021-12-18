@@ -36,7 +36,7 @@ public class CustomerControllerTest {
     @DisplayName("Deve salvar um cliente")
     void shouldCreateACustomer() {
         given()
-            .body(customerRequestFactory.getDefaultClientRequest())
+            .body(customerRequestFactory.getDefaultCustomerRequest())
         .when()
             .post(BASE_URL)
         .then()
@@ -91,7 +91,7 @@ public class CustomerControllerTest {
         var customer = customerFactory.getPersistedCustomer();
 
         Long idClientSaved = customer.getId();
-        CustomerRequest request = customerRequestFactory.getDefaultClientRequest();
+        CustomerRequest request = customerRequestFactory.getDefaultCustomerRequest();
         request.setName("Nome Completo Alterado");
         request.setPhone("00000000000");
         request.setEmail("email.alterado@email.com");

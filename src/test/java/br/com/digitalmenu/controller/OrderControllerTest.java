@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static br.com.digitalmenu.domain.enums.Status.OPEN;
 import static io.restassured.RestAssured.given;
 import static org.apache.http.HttpStatus.SC_CREATED;
-import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 

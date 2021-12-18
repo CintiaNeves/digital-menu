@@ -1,14 +1,15 @@
 spring:
   h2:
-    console: enabled=true
-    path: /h2_console
-  datasource:
-    url: jdbc:h2:file:~/menu_prod
-    username: sa
-    password: asdfg159753
-    driverClassName: org.h2.Driver
-  jpa:
-    show-sql: true
+    console:
+      path: /h2_console
+      enabled: true
+datasource:
+  url: jdbc:h2:file:~/menu_prod
+  username: sa
+  password: asdfg159753
+  driverClassName: org.h2.Driver
+jpa:
+  show-sql: true
 
 server:
   port: 8082

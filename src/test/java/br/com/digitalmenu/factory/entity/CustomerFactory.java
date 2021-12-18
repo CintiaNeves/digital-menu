@@ -19,13 +19,12 @@ public class CustomerFactory {
     }
 
     public Customer getDefaultCustomer() {
-        var customer = new Customer();
-        customer.setName("Nome Completo do Cliente");
-        customer.setEmail("cliente@email.com");
-        customer.setPhone("99999999999");
-        customer.getAddressList().addAll(List.of(addressFactory.getDefaultAddress()));
-
-        return customer;
+        return Customer.builder()
+            .name("Nome Completo do Cliente")
+            .email("cliente@email.com")
+            .phone("99999999999")
+            .addressList(List.of(addressFactory.getDefaultAddress()))
+            .build();
     }
 
     public Customer getPersistedCustomer() {

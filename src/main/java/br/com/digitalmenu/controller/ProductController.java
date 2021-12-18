@@ -36,18 +36,18 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ProductResponse> create (@Valid @RequestBody ProductRequest productRequest){
-        var product = service.save(productMapper.toProduct(productRequest));
+        var product = service.save(productMapper.productFromRequest(productRequest));
 
         var uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
                 .path("/{productId}")
                 .buildAndExpand(product.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(productMapper.toProductResponse(product));
+        return ResponseEntity.created(uri).body(productMapper.productToProductResponse(product));
     }
 
     @GetMapping
     public ResponseEntity<List<ProductResponse>> findAll (){
-        return ResponseEntity.ok(productMapper.toProductResponseList(service.findAll()));
+        return ResponseEntity.ok(productMapper.productToProductResponse(service.findAll()));
     }
 
     @GetMapping("/{productId}")
@@ -63,7 +63,7 @@ public class ProductController {
         var product = service.findById(productId)
                 .orElseThrow(()-> new NotFoundException(String.format("Product with id %s not found.", productId)));
 
-        return ResponseEntity.ok(productMapper.toProductResponse(service.update(productRequest, product)));
+        return ResponseEntity.ok(productMapper.productToProductResponse(service.update(productRequest, product)));
     }
 
     @DeleteMapping("/{productId}")
@@ -77,7 +77,7 @@ public class ProductController {
 
     @GetMapping("/search/{productDescription}")
     public ResponseEntity<List<ProductResponse>> findLikeDescription (@PathVariable String productDescription){
-        return ResponseEntity.ok(productMapper.toProductResponseList(service.findLikeDescription(productDescription)));
+        return ResponseEntity.ok(productMapper.productToProductResponse(service.findLikeDescription(productDescription)));
     }
 
     @PutMapping("/upload")

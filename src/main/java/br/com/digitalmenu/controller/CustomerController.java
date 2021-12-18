@@ -34,18 +34,18 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<CustomerResponse> create (@Valid @RequestBody CustomerRequest customerRequest){
-        var customer = service.save(customerMapper.toCustomer(customerRequest));
+        var customer = service.save(customerMapper.customerFromRequest(customerRequest));
 
         var uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
                 .path("/{customerId}")
                 .buildAndExpand(customer.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(customerMapper.toCustomerResponse(customer));
+        return ResponseEntity.created(uri).body(customerMapper.customerToCustomerResponse(customer));
     }
 
     @GetMapping
     public ResponseEntity<List<CustomerResponse>> findAll (){
-        return ResponseEntity.ok(customerMapper.toCustomerResponseList(service.findAll()));
+        return ResponseEntity.ok(customerMapper.customerToCustomerResponse(service.findAll()));
     }
 
     @GetMapping("/{customerId}")
@@ -61,7 +61,8 @@ public class CustomerController {
         var customer = service.findById(customerId)
                 .orElseThrow(()-> new NotFoundException(String.format("Customer with id %s not found.", customerId)));
 
-        return ResponseEntity.ok(customerMapper.toCustomerResponse(service.update(customerRequest, customerMapper.toCustomer(customerRequest))));
+        return ResponseEntity.ok(customerMapper.customerToCustomerResponse(service.update(customerRequest,
+                customerMapper.customerFromRequest(customerRequest))));
     }
 
     @DeleteMapping("/{customerId}")
@@ -75,6 +76,6 @@ public class CustomerController {
 
     @GetMapping("/search/{customerName}")
     public ResponseEntity<List<CustomerResponse>> findLikeName (@PathVariable String customerName){
-        return ResponseEntity.ok(customerMapper.toCustomerResponseList(service.findLikeName(customerName)));
+        return ResponseEntity.ok(customerMapper.customerToCustomerResponse(service.findLikeName(customerName)));
     }
 }

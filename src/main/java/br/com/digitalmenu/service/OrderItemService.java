@@ -1,13 +1,10 @@
 package br.com.digitalmenu.service;
 
 import br.com.digitalmenu.domain.entity.OrderItem;
-
-import java.util.List;
+import br.com.digitalmenu.domain.request.OrderItemRequest;
 
 public interface OrderItemService {
 
-    OrderItem save(OrderItem orderItem);
-
-    void saveAll(List<OrderItem> items);
+    OrderItem toOrderItem(OrderItemRequest orderItemRequest);
 
 }

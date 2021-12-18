@@ -16,11 +16,11 @@ public class AddressRequestFactory {
     }
 
     public AddressRequest getDefaultAddressRequest() {
-        var addressRequest = new AddressRequest();
-        addressRequest.setPostalArea("08700000");
-        addressRequest.setNumber(10);
-        addressRequest.setAddressName("Avenida Paulista");
-        addressRequest.setCityId(cityFactory.getPersistedCity().getId());
-        return addressRequest;
+        return AddressRequest.builder()
+            .postalArea("08700000")
+            .number(10)
+            .addressName("Avenida Paulista")
+            .city(cityFactory.getPersistedCity())
+            .build();
     }
 }

@@ -1,10 +1,11 @@
 package br.com.digitalmenu.factory.entity;
 
 import br.com.digitalmenu.domain.entity.Order;
-import br.com.digitalmenu.domain.enums.Status;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static br.com.digitalmenu.domain.enums.Status.OPEN;
 
 @Component
 public class OrderFactory {
@@ -21,11 +22,12 @@ public class OrderFactory {
 
     public Order getDefaultOrder() {
         var customer = customerFactory.getPersistedCustomer();
-        var order = new Order();
-        order.setStatus(Status.OPEN);
-        order.setAddress(customer.getAddressList().get(0));
-        order.setCustomer(customer);
-        order.setOrderItemList(List.of(orderItemFactory.getDefaultOrderItem()));
-        return order;
+        return Order.builder()
+            .status(OPEN)
+            .address(customer.getAddressList().get(0))
+            .customer(customer)
+            .orderItemList(List.of(orderItemFactory.getDefaultOrderItem()))
+            .build();
+
     }
 }

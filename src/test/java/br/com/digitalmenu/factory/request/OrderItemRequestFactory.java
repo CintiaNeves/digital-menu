@@ -16,10 +16,9 @@ public class OrderItemRequestFactory {
     }
 
     public OrderItemRequest getDefaultOrderItemRequest() {
-        var item = new OrderItemRequest();
-        item.setAmount(5);
-        item.setPriceItem(15D);
-        item.setProductId(productFactory.getPersistedProduct().getId());
-        return item;
+        return OrderItemRequest.builder()
+            .amount(5)
+            .productId(productFactory.getPersistedProduct().getId())
+            .build();
     }
 }

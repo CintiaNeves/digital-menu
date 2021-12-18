@@ -3,30 +3,20 @@ package br.com.digitalmenu.mapper;
 import br.com.digitalmenu.domain.entity.City;
 import br.com.digitalmenu.domain.request.CityRequest;
 import br.com.digitalmenu.domain.response.CityResponse;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Component
-@RequiredArgsConstructor
-public class CityMapper {
+@Mapper(componentModel = "spring")
+public interface CityMapper {
 
-    private final ModelMapper modelMapper;
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "datCreate", ignore = true)
+    @Mapping(target = "datUpdate", ignore = true)
+    City cityFromRequest(CityRequest cityRequest);
 
-    public City toCity(CityRequest cityRequest) {
-        return modelMapper.map(cityRequest, City.class);
-    }
+    CityResponse cityToCityResponse(City city);
 
-    public CityResponse toCityResponse(City city) {
-        return modelMapper.map(city, CityResponse.class);
-    }
-
-    public List<CityResponse> toCityResponseList(List<City> cities){
-        return cities.stream()
-                .map(this :: toCityResponse)
-                .collect(Collectors.toList());
-    }
+    List<CityResponse> cityToCityResponse(List<City> cityList);
 }

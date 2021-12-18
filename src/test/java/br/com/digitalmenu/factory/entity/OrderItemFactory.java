@@ -15,10 +15,9 @@ public class OrderItemFactory {
     }
 
     public OrderItem getDefaultOrderItem() {
-        var orderItem = new OrderItem();
-        orderItem.setPriceItem(15D);
-        orderItem.setAmount(1);
-        orderItem.setProduct(productFactory.getPersistedProduct());
-        return  orderItem;
+        return OrderItem.builder()
+            .amount(1)
+            .product(productFactory.getPersistedProduct())
+            .build();
     }
 }
