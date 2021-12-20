@@ -16,8 +16,6 @@ public class OrderControllerTest {
 
     private final OrderRequestFactory orderRequestFactory;
 
-    private final String BASE_URL = "/api/order/";
-
     @Autowired
     public OrderControllerTest(OrderRequestFactory orderRequestFactory) {
         this.orderRequestFactory = orderRequestFactory;
@@ -25,6 +23,7 @@ public class OrderControllerTest {
 
     @Test
     void shouldCreateOrder() {
+        String BASE_URL = "/api/order/";
         given()
             .body(orderRequestFactory.getDefaultOrderRequest())
         .when()

@@ -59,8 +59,7 @@ public class ProductControllerTest {
     @Test
     @DisplayName("Deve listar todos os produtos do banco")
     void shouldGetAllProducts() {
-        var product = productFactory.getPersistedProduct();
-
+        productFactory.getPersistedProduct();
         given()
         .when()
             .get(BASE_URL)
@@ -122,13 +121,27 @@ public class ProductControllerTest {
     @Test
     @DisplayName("Deve buscar um produto pela descrição")
     void shouldSearchProductByDescription(){
-        var product = productFactory.getPersistedProduct();
-
+        productFactory.getPersistedProduct();
         given()
         .when()
             .get(BASE_URL + "search/bacon")
         .then()
             .statusCode(SC_OK)
             .body("size()", equalTo(1));
+    }
+
+    @Test
+    @DisplayName("Deve ser idempontente no método de criação")
+    void shouldBeIdempotentWhenCreateMethod() {
+        var product = productFactory.getPersistedProduct();
+        var productRequest = requestFactory.getDefaultFoodProduct();
+        given()
+            .body(productRequest)
+        .when()
+            .post(BASE_URL)
+        .then()
+            .statusCode(SC_CREATED)
+            .body("description", equalTo(product.getDescription()))
+            .body("ingredients", equalTo(product.getIngredients()));
     }
 }
