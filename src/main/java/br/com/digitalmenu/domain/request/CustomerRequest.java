@@ -15,14 +15,14 @@ import java.util.List;
 @AllArgsConstructor
 public class CustomerRequest {
 
-    @NotBlank(message = "Name is mandatory.")
+    @NotBlank(message = "Name must not be null.")
     private String name;
 
-    @NotBlank(message = "Phone is mandatory.")
+    @NotBlank(message = "Phone must not be null.")
     private String phone;
 
     private String email;
 
-    @NotNull(message = "Address is mandatory.")
+    @NotNull(message = "Address must not be null.")
     List<AddressRequest> addressList;
 }

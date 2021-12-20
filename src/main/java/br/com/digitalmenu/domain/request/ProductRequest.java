@@ -16,19 +16,19 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class ProductRequest {
 
-    @NotBlank(message = "Description is mandatory.")
+    @NotBlank(message = "Description must not be null.")
     private String description;
 
     @Min(value = 1, message = "Price is lower than minimum.")
-    @NotNull(message = "Price is mandatory.")
+    @NotNull(message = "Price must not be null.")
     private Double price;
 
-    @NotNull(message = "Category is mandatory.")
+    @NotNull(message = "Category must not be null.")
     private Category category;
     
-    @NotNull(message = "Additional is mandatory.")
+    @NotNull(message = "Additional must not be null.")
     private Boolean additional;
 
-    @NotBlank(message = "Ingredients is mandatory.")
+    @NotBlank(message = "Ingredients must not be null.")
     private String ingredients;
 }

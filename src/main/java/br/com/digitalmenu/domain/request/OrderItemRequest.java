@@ -14,10 +14,10 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class OrderItemRequest {
 
-    @NotNull(message = "productId is mandatory.")
+    @NotNull(message = "productId must not be null..")
     private Long productId;
 
-    @NotNull(message = "Amount is mandatory.")
+    @NotNull(message = "Amount must not be null..")
     @Min(value = 1)
     private Integer amount;
 

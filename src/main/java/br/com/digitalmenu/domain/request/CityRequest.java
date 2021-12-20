@@ -13,6 +13,6 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class CityRequest {
 
-    @NotBlank(message = "Name is mandatory.")
+    @NotBlank(message = "Name must not be null.")
     private String name;
 }
