@@ -17,8 +17,8 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public City save(City city) {
-        var cityToSave = repository.findByName(city.getName());
-        return cityToSave.orElseGet(() -> repository.save(city));
+        var citySaved = repository.findByName(city.getName());
+        return citySaved.orElseGet(() -> repository.save(city));
     }
 
     @Override

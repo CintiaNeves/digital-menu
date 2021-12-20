@@ -14,6 +14,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class OrderStatusRequest {
 
-    @NotNull(message = "Status is mandatory.")
+    @NotNull(message = "Status must not be null..")
     private Status status;
 }

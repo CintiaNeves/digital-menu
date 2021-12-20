@@ -2,7 +2,7 @@ package br.com.digitalmenu.service.impl;
 
 import br.com.digitalmenu.domain.entity.Product;
 import br.com.digitalmenu.domain.request.ProductRequest;
-import br.com.digitalmenu.exception.EntityAlreadyExistsException;
+import br.com.digitalmenu.exception.NotFoundException;
 import br.com.digitalmenu.exception.UploadProductImageException;
 import br.com.digitalmenu.repository.ProductRepository;
 import br.com.digitalmenu.service.ProductService;
@@ -30,7 +30,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product save(Product product) {
-        return repository.save(product);
+        var productSaved = repository.findByDescription(product.getDescription());
+        return productSaved.orElseGet(() -> repository.save(product));
+
     }
 
     @Override
@@ -57,7 +59,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void delete(Long productId) {
-        Product product = repository.findById(productId).get();
+        Product product = repository.findById(productId)
+                .orElseThrow((() -> new NotFoundException(String.format("Product is not found by id %s.", productId))));
         repository.delete(product);
     }
 
@@ -74,7 +77,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Product uploadImage(MultipartFile image, Long productId) {
-        Product product = repository.findById(productId).get();
+        Product product = repository.findById(productId)
+                .orElseThrow(() -> new NotFoundException(String.format("Product is not found by id %s.", productId)));
         Path directoryPath = Paths.get(new File("").getAbsolutePath().concat("/src/main/resources/static/images"), product.getDescription());
         Path imagePath = directoryPath.resolve(Objects.requireNonNull(image.getOriginalFilename()));
 

@@ -11,10 +11,10 @@ public class ProductRequestFactory {
 
     public ProductRequest getDefaultFoodProduct() {
         return ProductRequest.builder()
-            .description("x-salad")
+            .description("x-bacon")
             .price(15D)
             .category(FOOD)
-            .ingredients("bread, cheese, meat and salad.")
+            .ingredients("bread, cheese, bacon and salad.")
             .additional(false)
             .build();
     }

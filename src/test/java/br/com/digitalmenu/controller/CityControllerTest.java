@@ -43,8 +43,7 @@ public class CityControllerTest {
     @Test
     @DisplayName("Deve listar todas as cidades")
     void shouldListAllCities() {
-        var city = cityFactory.getPersistedCity();
-
+        cityFactory.getPersistedCity();
         given()
         .when()
             .get(BASE_URL)
@@ -64,5 +63,19 @@ public class CityControllerTest {
         .then()
             .statusCode(SC_OK)
             .body("name", notNullValue());
+    }
+
+    @Test
+    @DisplayName("Deve ser idempontente no método de criação")
+    void shouldBeIdempotentWhenCreateMethod() {
+        var city = cityFactory.getPersistedCity();
+        var cityRequest = requestFactory.getDefaultCityRequest();
+        given()
+            .body(cityRequest)
+        .when()
+            .post(BASE_URL)
+        .then()
+            .statusCode(SC_CREATED)
+            .body("name", equalTo(city.getName()));
     }
 }

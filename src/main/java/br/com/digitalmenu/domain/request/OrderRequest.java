@@ -14,13 +14,13 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderRequest {
 
-    @NotNull(message = "OrderItemList is mandatory.")
+    @NotNull(message = "OrderItemList must not be null..")
     List<OrderItemRequest> orderItemList;
 
-    @NotNull(message = "customerId is mandatory.")
+    @NotNull(message = "customerId must not be null..")
     private Long customerId;
 
-    @NotNull(message = "AddressId is mandatory.")
+    @NotNull(message = "AddressId must not be null..")
     private Long addressId;
 
 }

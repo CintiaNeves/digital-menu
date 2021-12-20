@@ -34,7 +34,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer save(Customer customer) {
         var customerSaved = repository.findByPhone(customer.getPhone());
-
         return customerSaved.orElseGet(() -> repository.save(validatedCustomer(customer)));
     }
 

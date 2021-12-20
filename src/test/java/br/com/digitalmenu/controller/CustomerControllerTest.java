@@ -49,8 +49,7 @@ public class CustomerControllerTest {
     @Test
     @DisplayName("Deve listar todos os clientes")
     void shouldGetAllClients() {
-        var customer = customerFactory.getPersistedCustomer();
-
+        customerFactory.getPersistedCustomer();
         given()
         .when()
             .get(BASE_URL)
@@ -109,13 +108,29 @@ public class CustomerControllerTest {
     @Test
     @DisplayName("Deve buscar um cliente pelo nome")
     void shouldSearchClientByName(){
-        var customer = customerFactory.getPersistedCustomer();
-
+        customerFactory.getPersistedCustomer();
         given()
         .when()
             .get(BASE_URL + "search/Nome")
         .then()
             .statusCode(SC_OK)
             .body("size()", equalTo(1));
+    }
+
+    @Test
+    @DisplayName("Deve ser idempontente no método de criação")
+    void shouldBeIdempotentWhenCreateMethod() {
+        var customer = customerFactory.getPersistedCustomer();
+        var customerRequest = customerRequestFactory.getDefaultCustomerRequest();
+        given()
+            .body(customerRequest)
+        .when()
+            .post(BASE_URL)
+        .then()
+            .statusCode(SC_CREATED)
+                .body("name", equalTo(customer.getName()))
+                .body("phone", equalTo(customer.getPhone()))
+                .body("email", equalTo(customer.getEmail()));
+
     }
 }
