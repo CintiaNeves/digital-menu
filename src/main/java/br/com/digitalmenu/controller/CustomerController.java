@@ -58,18 +58,11 @@ public class CustomerController {
 
     @PutMapping("/{customerId}")
     public ResponseEntity<CustomerResponse> update (@PathVariable Long customerId, @Valid @RequestBody CustomerRequest customerRequest){
-        var customer = service.findById(customerId)
-                .orElseThrow(()-> new NotFoundException(String.format("Customer with id %s not found.", customerId)));
-
-        return ResponseEntity.ok(customerMapper.customerToCustomerResponse(service.update(customerRequest,
-                customerMapper.customerFromRequest(customerRequest))));
+        return ResponseEntity.ok(customerMapper.customerToCustomerResponse(service.update(customerId, customerRequest)));
     }
 
     @DeleteMapping("/{customerId}")
     public ResponseEntity<Void> delete (@Valid @PathVariable Long customerId){
-        var customer = service.findById(customerId)
-                .orElseThrow(()-> new NotFoundException(String.format("Customer with id %s not found.", customerId)));
-
         service.delete(customerId);
         return ResponseEntity.noContent().build();
     }

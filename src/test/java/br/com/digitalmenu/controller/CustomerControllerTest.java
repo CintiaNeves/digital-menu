@@ -88,21 +88,17 @@ public class CustomerControllerTest {
     @DisplayName("Deve atualizar os dados do cliente no banco")
     void shouldUpdateClient() {
         var customer = customerFactory.getPersistedCustomer();
-
         Long idClientSaved = customer.getId();
-        CustomerRequest request = customerRequestFactory.getDefaultCustomerRequest();
-        request.setName("Nome Completo Alterado");
-        request.setPhone("00000000000");
-        request.setEmail("email.alterado@email.com");
+        CustomerRequest request = customerRequestFactory.getUpdatedCustomerRequest();
         given()
             .body(request)
         .when()
             .put(BASE_URL + idClientSaved)
         .then()
             .statusCode(SC_OK)
-            .body("name", containsString("Alterado"))
-            .body("phone", equalTo("00000000000"))
-            .body("email", containsString("alterado"));
+            .body("name", equalTo(request.getName()))
+            .body("phone", equalTo(request.getPhone()))
+            .body("email", equalTo(request.getEmail()));
     }
 
     @Test

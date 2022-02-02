@@ -24,4 +24,13 @@ public class CustomerRequestFactory {
             .addressList(List.of(addressRequestFactory.getDefaultAddressRequest()))
             .build();
     }
+
+    public CustomerRequest getUpdatedCustomerRequest() {
+        return CustomerRequest.builder()
+                .name("Nome Completo Alterado")
+                .email("email.alterado@email.com")
+                .phone("00000000000")
+                .addressList(List.of())
+                .build();
+    }
 }

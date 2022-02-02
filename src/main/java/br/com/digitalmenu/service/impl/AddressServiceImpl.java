@@ -25,9 +25,8 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Address validateAddress(Address address) {
-        var city = cityService.findById(address.getCity().getId())
-                .orElseThrow(() -> new NotFoundException(String.format("City with id %s not found.", address.getCity().getId())));
-        address.setCity(city);
+        var citySaved = cityService.findByName(address.getCity().getName());
+        address.setCity(citySaved.orElseGet(() -> cityService.save(address.getCity())));
         return address;
     }
 }

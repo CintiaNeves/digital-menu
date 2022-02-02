@@ -43,35 +43,28 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Optional<Customer> findById(Long clientId) {
-        return repository.findById(clientId);
+    public Optional<Customer> findById(Long customerId) {
+        return repository.findById(customerId);
     }
 
     @Override
-    public Customer update(CustomerRequest customerRequest, Customer customer) {
-        buildCustomer(customerRequest, customer);
-        return repository.save(customer);
+    public Customer update(Long customerId, CustomerRequest customerRequest) {
+        var customerSaved = findById(customerId)
+                .orElseThrow(()-> new NotFoundException(String.format("Customer with id %s not found.", customerId)));
+        updateCustomer(customerRequest, customerSaved);
+        return repository.save(customerSaved);
     }
 
     @Override
-    public Boolean existsById(Long clientId) {
-        return repository.existsById(clientId);
-    }
-
-    @Override
-    public void delete(Long clientId) {
-        Customer customer = repository.findById(clientId).orElseThrow();
+    public void delete(Long customerId) {
+        Customer customer = repository.findById(customerId)
+                .orElseThrow(()-> new NotFoundException(String.format("Customer with id %s not found.", customerId)));
         repository.delete(customer);
     }
 
     @Override
-    public Optional<Customer> findByName(String clientName) {
-        return repository.findByName(clientName);
-    }
-
-    @Override
-    public List<Customer> findLikeName(String clientName) {
-        return repository.findByNameContaining(clientName);
+    public List<Customer> findLikeName(String customerId) {
+        return repository.findByNameContaining(customerId);
     }
 
     private Customer validatedCustomer(final Customer customer) {
@@ -79,23 +72,23 @@ public class CustomerServiceImpl implements CustomerService {
         return customer;
     }
 
-    private void buildCustomer(CustomerRequest customerRequest, Customer customer) {
-        nameFormatter(customerRequest.getName());
+    private void updateCustomer(CustomerRequest customerRequest, Customer customer) {
         customer.setName(nameFormatter(customerRequest.getName()));
         customer.setPhone(customerRequest.getPhone());
         customer.setEmail(customerRequest.getEmail().toLowerCase(Locale.US));
         Set<Address> addressList = new HashSet<>();
 
-        for(var addressRequest : customerRequest.getAddressList()){
-            Address address = new Address();
-            City city = cityService.findById(addressRequest.getCity().getId())
-                    .orElseThrow(() -> new NotFoundException("Entity City is not found"));
-            address.setCity(city);
-            address.setAddressName(addressRequest.getAddressName());
-            address.setNumber(addressRequest.getNumber());
-            address.setPostalArea(addressRequest.getPostalArea());
-            addressList.add(address);
-        }
+        customerRequest.getAddressList().forEach(addressRequest -> {
+            City city = cityService.findByName(addressRequest.getCity().getName())
+                    .orElseThrow(() -> new NotFoundException("Entity City is not found."));
+
+            addressList.add(Address.builder()
+                    .city(city)
+                    .addressName(addressRequest.getAddressName())
+                    .number(addressRequest.getNumber())
+                    .postalArea(addressRequest.getPostalArea())
+                    .build());
+        });
         customer.getAddressList().addAll(addressList);
     }
 

@@ -12,15 +12,11 @@ public interface CustomerService {
 
     List<Customer> findAll();
 
-    Optional<Customer> findById(Long clientId);
+    Optional<Customer> findById(Long customerId);
 
-    Customer update(CustomerRequest customerRequest, Customer customer);
+    Customer update(Long customerId, CustomerRequest customerRequest);
 
-    Boolean existsById(Long clientId);
+    void delete(Long customerId);
 
-    void delete(Long clientId);
-
-    Optional<Customer> findByName(String clientName);
-
-    List<Customer> findLikeName(String clientName);
+    List<Customer> findLikeName(String customerId);
 }
