@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class AddressRequestFactory {
 
-    private final CityFactory cityFactory;
+    private final CityRequestFactory requestFactory;
 
     @Autowired
-    public AddressRequestFactory(CityFactory cityFactory) {
-        this.cityFactory = cityFactory;
+    public AddressRequestFactory(CityRequestFactory requestFactory) {
+        this.requestFactory = requestFactory;
     }
 
     public AddressRequest getDefaultAddressRequest() {
@@ -20,7 +20,7 @@ public class AddressRequestFactory {
             .postalArea("08700000")
             .number(10)
             .addressName("Avenida Paulista")
-            .city(cityFactory.getPersistedCity())
+            .city(requestFactory.getDefaultCityRequest())
             .build();
     }
 }

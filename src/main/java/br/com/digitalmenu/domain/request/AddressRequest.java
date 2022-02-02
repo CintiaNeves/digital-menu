@@ -23,7 +23,7 @@ public class AddressRequest {
     private Integer number;
 
     @NotNull(message = "City must not be null.")
-    private City city;
+    private CityRequest city;
 
     private String postalArea;
 }

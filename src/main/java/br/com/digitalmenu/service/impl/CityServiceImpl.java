@@ -30,4 +30,9 @@ public class CityServiceImpl implements CityService {
     public Optional<City> findById(Long id) {
         return repository.findById(id);
     }
+
+    @Override
+    public Optional<City> findByName(String name) {
+        return repository.findByName(name);
+    }
 }

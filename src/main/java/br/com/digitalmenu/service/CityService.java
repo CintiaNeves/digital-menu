@@ -12,4 +12,6 @@ public interface CityService {
     List<City> findAll();
 
     Optional<City> findById(Long id);
+
+    Optional<City> findByName(String name);
 }
